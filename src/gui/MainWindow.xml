@@ -1,0 +1,27 @@
+
+	<?import javafx.scene.control.*?>
+	<?import javafx.scene.layout.*?>
+	
+
+	<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="250.0" prefWidth="300.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.MainWindowController">
+
+	  <children>
+
+	    <HBox spacing="10">
+	    	<Label fx:id="inputLbl" alignment="CENTER_LEFT"
+	    		prefHeight="30.0" text="Select file" textAlignment="LEFT">
+	    	</Label>
+	    	<Button fx:id="browse" text="Durchsuchen..." onAction="#onPressBrowse"></Button>
+	    </HBox>
+
+	    <TextField fx:id="tf_absolutePath" prefWidth="100.0" />
+
+	    <HBox spacing="10">
+	    	<Label fx:id="outputLbl" alignment="CENTER_LEFT" prefHeight="30" text="New File´s name" textAlignment="LEFT"></Label>
+	    	
+	    </HBox>
+	    <Button fx:id="okBtn" onAction="#onPressOk" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" />
+
+	      </children>
+
+	</VBox>
