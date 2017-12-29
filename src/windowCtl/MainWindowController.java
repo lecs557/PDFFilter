@@ -1,5 +1,6 @@
 package windowCtl;
 import java.io.File;
+import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,15 +19,15 @@ public class MainWindowController {
     @FXML
 	private Button okBtn;
 	@FXML
-	private void onPressOk(){		
+	private void onPressOk() throws IOException{		
 		TextFileController xml = Main.getSession().getTextFileController();
 		PDFController pdf = Main.getSession().getPDFController();
 		String path = tf_absolutePath.getText();
 		
-		for (int i=1; i<2; i++){
+		for (int i=1; i<4; i++){
 			int page= i+2;
 			pdf.readPDF(path, page);
-			
+			xml.writeDailytxt();
 		}
 		
 		

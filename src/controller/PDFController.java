@@ -2,7 +2,9 @@ package controller;
 
 import java.io.IOException;
 
+import model.DailyText;
 import model.FontFilter;
+import model.Main;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;
@@ -12,16 +14,25 @@ import com.itextpdf.text.pdf.parser.RenderFilter;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextRenderInfo;
 import com.itextpdf.text.pdf.parser.Vector;
+
 /**
- * Reads the PDF-File and puts different segments
- * of the file into separate objects
+ * Reads the PDF-File and puts different segments of the file into separate
+ * objects
+ * 
  * @author Marcel
- *
+ * 
  */
 public class PDFController {
+
+	private DailyText daily;
+	private String paragraph = "";
+	private int oldy = 0;
+	private int paraX = 31;
+	private String oldfont = "SQUOPY+Arial-BoldMT";
 	
-	String paragraph= "" ;
-	int oldy = 0;
+	public PDFController(){
+		this.daily = Main.getSession().getDaily();
+	}
 
 	public void readPDF(String path, int page) {
 
@@ -32,41 +43,46 @@ public class PDFController {
 			TextExtractionStrategy strategy = new FilteredTextRenderListener(
 					new LocationTextExtractionStrategy(), info);
 
+			
 			String content = PdfTextExtractor.getTextFromPage(reader, page,
 					strategy);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public void createText(TextRenderInfo rinfo){
-		
-		String word = rinfo.getText();
+
+	public void createText(TextRenderInfo rinfo) {
+
+		String word = rinfo.getText().replace("-", "");
 		String font = rinfo.getFont().getPostscriptFontName();
 		Vector start = rinfo.getBaseline().getStartPoint();
-		Vector end = rinfo.getBaseline().getEndPoint();
-		
-		if (yHasChanged(start)){
-			paragraph += word+" ";
-		}
-		else {
-			paragraph += word+" ";
+
+		if (!word.equals("")) {
+			if (fontChanged(font)) {
+				daily.getDay().add(paragraph) ;
+				paragraph = "";
+			}if(isYChanged(start) && (int) start.get(0)!=31){
+				paragraph+="\r\n"+word;
+			}else {
+				paragraph += word + "";
+			}
 		}
 
 	}
-	
-	private boolean yHasChanged(Vector start){
-		
-		boolean changed = (int)start.get(1)!=oldy;
-		oldy=(int)start.get(1);
-		
+
+	private boolean isYChanged(Vector start) {
+
+		boolean yChanged = (int) start.get(1) != oldy;
+		oldy = (int) start.get(1);
+		return yChanged;
+	}
+
+	private boolean fontChanged(String font) {
+
+		boolean changed = !font.equals(oldfont);
+		oldfont = font;
 		return changed;
-				
-	
 	}
 
-	public String getParagraph(){
-		System.out.println(paragraph);
-		return paragraph;
-	}
+	
 }

@@ -15,10 +15,12 @@ public class Session {
 	private PDFController pdfController;
 	private TextFileController textFileController;
 	private Stage currentStage;
+	private DailyText daily;
 	
 	public Session() {}
 
 	public void initialize(Stage stage){
+		this.daily = new DailyText();
 		this.currentStage=stage;
 		this.pdfController = new PDFController();
 		this.textFileController = new TextFileController();
@@ -34,6 +36,10 @@ public class Session {
 
 	public Stage getCurrentStage() {
 		return currentStage;
+	}
+	
+	public DailyText getDaily(){
+		return daily;
 	}
 
 

@@ -20,7 +20,7 @@ public class Main extends Application {
 	public void start(Stage stage) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("/gui/MainWindow.xml")); 
 		Scene scene = new Scene(root);
-		stage.setTitle("PDF to XML Converter");
+		stage.setTitle("PDF Filter");
 		stage.setScene(scene);        
 		stage.show();    
 		ses = new Session();
