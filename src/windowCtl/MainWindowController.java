@@ -24,11 +24,11 @@ public class MainWindowController {
 		PDFController pdf = Main.getSession().getPDFController();
 		String path = tf_absolutePath.getText();
 		
-		for (int i=1; i<4; i++){
-			int page= i+2;
+		for (int i=3; i<10; i++){
+			int page= i+1;
 			pdf.readPDF(path, page);
-			xml.writeDailytxt();
 		}
+		xml.writeDailytxt();
 		
 		
 		

@@ -9,7 +9,8 @@ import java.util.ArrayList;
  */
 public class DailyText {
 
-	ArrayList<String> day;
+	private String datum;
+	private ArrayList<String> day;
 	
 	public DailyText() {
 		day = new ArrayList<String>();
@@ -19,4 +20,11 @@ public class DailyText {
 		return day;
 	}
 	
+	public void setDatum(String datum) {
+		this.datum = datum;
 	}
+
+	public String getDatum(){
+		return datum;
+	}
+}
