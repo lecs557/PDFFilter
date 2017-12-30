@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import model.DailyText;
 import model.FontFilter;
@@ -24,10 +25,10 @@ import com.itextpdf.text.pdf.parser.Vector;
  */
 public class PDFController {
 
-	private DailyText daily;
+	private ArrayList<DailyText> daily;
 	private String paragraph = "";
 	private int oldy = 0;
-	private int paraX = 31;
+	private int day=0;
 	private String oldfont = "SQUOPY+Arial-BoldMT";
 	
 	public PDFController(){
@@ -43,9 +44,10 @@ public class PDFController {
 			TextExtractionStrategy strategy = new FilteredTextRenderListener(
 					new LocationTextExtractionStrategy(), info);
 
-			
+			daily.add(new DailyText());
 			String content = PdfTextExtractor.getTextFromPage(reader, page,
 					strategy);
+			day++;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -59,13 +61,16 @@ public class PDFController {
 
 		if (!word.equals("")) {
 			if (fontChanged(font)) {
-				daily.getDay().add(paragraph) ;
-				paragraph = "";
-			}if(isYChanged(start) && (int) start.get(0)!=31){
-				paragraph+="\r\n"+word;
-			}else {
-				paragraph += word + "";
-			}
+				daily.get(day).getDay().add(paragraph) ;
+				paragraph = word;
+				isYChanged(start);
+			}else if(isYChanged(start) && (int) start.get(0)!=31 && (int) start.get(0) != 25 && (int) start.get(0) != 104){
+				System.out.println(start.get(0));
+				daily.get(day).getDay().add(paragraph) ;
+				paragraph = word;
+			}else
+			paragraph += word;
+			
 		}
 
 	}
