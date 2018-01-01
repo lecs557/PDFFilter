@@ -41,14 +41,14 @@ public class MainWindowController {
 	}
 	@FXML
 	private void onPressAnalize() throws IOException{
-//		TextFileController xml = Main.getSession().getTextFileController();
-//		PDFController pdf = Main.getSession().getPDFController();
-//		String path = tf_absolutePath.getText();
-//
-//		for (int i = 3; i < 10; i++) {
-//			int page = i + 1;
-//			pdf.readPDF(path, page);
-//		}
+		TextFileController xml = Main.getSession().getTextFileController();
+		PDFController pdf = Main.getSession().getPDFController();
+		String path = tf_absolutePath.getText();
+
+		for (int i = 3; i < 5; i++) {
+			int page = i + 1;
+			pdf.readPDF(path, page);
+		}
 		
 		Stage stage = Main.getSession().getCurrentStage();
 		Parent root = FXMLLoader.load(getClass().getResource("/gui/AnalizeWindow.xml")); 

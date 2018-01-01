@@ -23,7 +23,7 @@
 	    <Button fx:id="okBtn" onAction="#onPressOk" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" >
 	    	</Button>
 
-	      <Button fx:id="analizeBtn" onAction="#onPressAnalize" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" >
+	      <Button fx:id="analizeBtn" onAction="#onPressAnalize" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Analize" textAlignment="CENTER" disable="true" >
 	    	</Button></children>
 
 	</VBox>
