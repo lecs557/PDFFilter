@@ -18,7 +18,8 @@ public class Main extends Application {
 
 	@Override 
 	public void start(Stage stage) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/MainWindow.xml")); 
+		//Parent root = FXMLLoader.load(getClass().getResource("/gui/MainWindow.xml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/gui/AnalizeWindow.xml")); 
 		Scene scene = new Scene(root);
 		stage.setTitle("PDF Filter");
 		stage.setScene(scene);        

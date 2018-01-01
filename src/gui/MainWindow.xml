@@ -20,8 +20,10 @@
 	    	<Label fx:id="outputLbl" alignment="CENTER_LEFT" prefHeight="30" text="New File´s name" textAlignment="LEFT"></Label>
 	    	
 	    </HBox>
-	    <Button fx:id="okBtn" onAction="#onPressOk" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" />
+	    <Button fx:id="okBtn" onAction="#onPressOk" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" >
+	    	</Button>
 
-	      </children>
+	      <Button fx:id="analizeBtn" onAction="#onPressAnalize" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" >
+	    	</Button></children>
 
 	</VBox>

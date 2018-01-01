@@ -24,7 +24,9 @@ import com.itextpdf.text.pdf.parser.Vector;
  * 
  */
 public class PDFController {
-
+	
+	private String analizeFont;
+	private String analizeX; 
 	private ArrayList<DailyText> daily;
 	private String paragraph = "";
 	private int oldy = 0;
@@ -45,6 +47,8 @@ public class PDFController {
 			String content = PdfTextExtractor.getTextFromPage(reader, page,
 					strategy);
 			createDatum();
+			analizeFont+="------------"+day+"-------";
+			analizeX+="------------"+day+"-------";
 			day++;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -58,11 +62,12 @@ public class PDFController {
 		if (!word.equals("")) {
 			if (fontChanged(font)) {
 				daily.get(day).getDay().add(paragraph) ;
+				analizeFont += font+"\n";
 				paragraph = word;
 				isYChanged(start);
-			}else if(isYChanged(start) && (int) start.get(0)!=31 && (int) start.get(0) != 25 && (int) start.get(0) != 104){
-				System.out.println(start.get(0));
-				daily.get(day).getDay().add(paragraph) ;
+			}else if(isYChanged(start)) {
+				daily.get(day).getDay().add(paragraph);
+				analizeX += start.get(0)+"\n";
 				paragraph = word;
 			}else
 			paragraph += word;
@@ -92,5 +97,12 @@ public class PDFController {
 			daily.get(day).setDatum("next");
 		}
 	}
-	
+
+	public String getAnalizeFont() {
+		return analizeFont;
+	}
+
+	public String getAnalizeX() {
+		return analizeX;
+	}	
 }
