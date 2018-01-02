@@ -11,6 +11,7 @@ public class DailyText {
 
 	private String datum;
 	private ArrayList<String> day;
+	private boolean hasTitle;
 	
 	public DailyText() {
 		day = new ArrayList<String>();
@@ -26,5 +27,13 @@ public class DailyText {
 
 	public String getDatum(){
 		return datum;
+	}
+
+	public boolean isHasTitle() {
+		return hasTitle;
+	}
+
+	public void setHasTitle(boolean hasTitle) {
+		this.hasTitle = hasTitle;
 	}
 }

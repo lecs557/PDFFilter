@@ -23,11 +23,11 @@ import com.itextpdf.text.pdf.parser.Vector;
  */
 public class PDFController {
 
+	private ArrayList<DailyText> daily;
 	private String analizeFont ="";
 	private String analizeX ="";
 	private String segment = "";
 	private boolean isDate = false;
-	private ArrayList<DailyText> daily;
 	private int oldy = 500;
 	private int day = 0;
 
@@ -80,6 +80,10 @@ public class PDFController {
 				daily.get(day).getDay().add(segment);
 				analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
 				segment = word;
+				if (font.contains("Bold") && daily.get(day).getDay().size()>1){
+					System.out.println(font+" "+ daily.get(day).getDay().size());
+					daily.get(day).setHasTitle(true);
+				}
 			} else
 				segment += word;
 
