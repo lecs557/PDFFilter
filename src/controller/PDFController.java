@@ -26,9 +26,9 @@ public class PDFController {
 	private String analizeFont ="";
 	private String analizeX ="";
 	private String segment = "";
-	private String oldfont = "SQUOPY+Arial-BoldMT";
+	private boolean isDate = false;
 	private ArrayList<DailyText> daily;
-	private int oldy = 0;
+	private int oldy = 500;
 	private int day = 0;
 
 	public PDFController() {
@@ -46,11 +46,15 @@ public class PDFController {
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
 		daily.add(new DailyText());
+		oldy = 500;
+		segment="";
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
-		createDatum();
 		analizeFont += "------------" + day + "----\n";
 		analizeX += "------------" + day + "----\n";
+		daily.get(day).getDay().add(segment);
+		createDatum();
+		isDate=false;
 		day++;
 	}
 
@@ -64,11 +68,14 @@ public class PDFController {
 		String font = rinfo.getFont().getPostscriptFontName();
 		Vector start = rinfo.getBaseline().getStartPoint();
 		if (!word.equals("")) {
-			if (fontChanged(font)) {
-				daily.get(day).getDay().add(segment);
-				analizeFont += font +" "+ (int) start.get(1)+"\n";
-				segment = word;
-				isParagraph(start);
+			if (isYbigger(start) || isDate) {
+				if(!isDate){
+					daily.get(day).getDay().add(segment);
+					isDate = true;
+					segment=word;
+					analizeFont += font +" "+ (int) start.get(1)+"\n";
+				}
+				segment += word;
 			} else if (isParagraph(start)) {
 				daily.get(day).getDay().add(segment);
 				analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
@@ -83,28 +90,22 @@ public class PDFController {
 	private boolean isParagraph(Vector start) {
 		int x = (int) start.get(0);
 		int y = (int) start.get(1);
-		boolean yChanged = x != 104 && x != 31 && x !=25 && y!= oldy;
+		boolean newPara = x != 104 && x != 31 && x !=25 && y!= oldy;
 		oldy = (int) start.get(1);
-		return yChanged;
+		return newPara;
 	}
 
-	private boolean fontChanged(String font) {
-		boolean changed = !font.equals(oldfont);
-		oldfont = font;
-		return changed;
+	private boolean isYbigger(Vector start) {
+		boolean bigger = (int) start.get(1) > oldy;
+		return bigger;
 	}
 
 	private void createDatum() {
-		if (daily.size() > 1) {
-			int length = daily.get(day - 1).getDay().size();
-			ArrayList<String> current = daily.get(day).getDay();
-			ArrayList<String> before = daily.get(day - 1).getDay();
-			daily.get(day - 1).setDatum(
-					current.get(0) + "_" + before.get(length - 2) + "_"
-							+ before.get(length - 1));
-			daily.get(day).setDatum("next");
-		}
+		int length = daily.get(day).getDay().size();
+		ArrayList<String> current = daily.get(day).getDay();
+		daily.get(day).setDatum(current.get(length - 1));
 	}
+	
 
 	public String getAnalizeFont() {
 		return analizeFont;
