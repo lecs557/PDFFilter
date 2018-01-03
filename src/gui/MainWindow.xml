@@ -17,7 +17,7 @@
 	    <TextField fx:id="tf_absolutePath" prefWidth="100.0" />
 
 	    <HBox spacing="10">
-	    	<Label fx:id="outputLbl" alignment="CENTER_LEFT" prefHeight="30" text="New File´s name" textAlignment="LEFT"></Label>
+	    	<ProgressBar fx:id="bar" ></ProgressBar>
 	    	
 	    </HBox>
 	    <Button fx:id="okBtn" onAction="#onPressOk" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" >

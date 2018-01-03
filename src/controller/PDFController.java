@@ -50,7 +50,7 @@ public class PDFController {
 		segment="";
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
-		analizeFont += "------------" + day + "----\n";
+		analizeFont += "\n------------" + day + "----\n";
 		analizeX += "------------" + day + "----\n";
 		daily.get(day).getDay().add(segment);
 		createDatum();
@@ -73,22 +73,23 @@ public class PDFController {
 					daily.get(day).getDay().add(segment);
 					isDate = true;
 					segment=word;
-					analizeFont += font +" "+ (int) start.get(1)+"\n";
+					analizeFont +=word;
+					analizeX += (int) start.get(0) + "  " + (int) start.get(1)+ " DATE\n";
 				}
 				segment += word;
 			} else if (isParagraph(start)) {
 				daily.get(day).getDay().add(segment);
 				analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
+				analizeFont +="\n" +word;				
 				segment = word;
 				if (font.contains("Bold") && daily.get(day).getDay().size()>1){
-					System.out.println(font+" "+ daily.get(day).getDay().size());
 					daily.get(day).setHasTitle(true);
 				}
-			} else
+			} else{
 				segment += word;
-
+				analizeFont +=word;
+			}
 		}
-
 	}
 
 	private boolean isParagraph(Vector start) {

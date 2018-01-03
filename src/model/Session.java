@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import controller.PDFController;
 import controller.TextFileController;
@@ -18,14 +19,16 @@ public class Session {
 	private TextFileController textFileController;
 	private Stage currentStage;
 	private ArrayList<DailyText> daily;
+	private Scene scene;	
 	
 	public Session() {}
 
-	public void initialize(Stage stage){
+	public void initialize(Stage stage, Scene scene){
 		this.daily = new ArrayList<DailyText>();
 		this.currentStage=stage;
 		this.pdfController = new PDFController();
 		this.textFileController = new TextFileController();
+		this.scene=scene;
 	}
 
 	public PDFController getPDFController() {
@@ -42,6 +45,10 @@ public class Session {
 	
 	public ArrayList<DailyText> getDaily(){
 		return daily;
+	}
+
+	public Scene getScene() {
+		return scene;
 	}
 
 

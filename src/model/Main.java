@@ -25,7 +25,7 @@ public class Main extends Application {
 		stage.setScene(scene);        
 		stage.show();    
 		ses = new Session();
-		ses.initialize(stage);
+		ses.initialize(stage, scene);
 		}
 
 	public static void main(String[] parameters) {       
