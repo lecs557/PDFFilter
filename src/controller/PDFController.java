@@ -24,7 +24,7 @@ import com.itextpdf.text.pdf.parser.Vector;
 public class PDFController {
 
 	private ArrayList<DailyText> daily;
-	private String analizeFont ="";
+	private String analizeText ="";
 	private String analizeX ="";
 	private String segment = "";
 	private boolean isDate = false;
@@ -50,10 +50,10 @@ public class PDFController {
 		segment="";
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
-		analizeFont += "\n------------" + day + "----\n";
-		analizeX += "------------" + day + "----\n";
 		daily.get(day).getDay().add(segment);
 		createDatum();
+		analizeText += "\n------------" + day + "----\n";
+		analizeX += "------------" + day + "----\n";
 		isDate=false;
 		day++;
 	}
@@ -72,22 +72,39 @@ public class PDFController {
 				if(!isDate){
 					daily.get(day).getDay().add(segment);
 					isDate = true;
-					segment=word;
-					analizeFont +=word;
 					analizeX += (int) start.get(0) + "  " + (int) start.get(1)+ " DATE\n";
+					analizeText +="\n"+word;
+					segment = word;
+					yChanged(start);
 				}
-				segment += word;
+				else if(yChanged(start)){
+					analizeX += (int) start.get(0) + "  " + (int) start.get(1)+ " DATE\n";
+					segment += " "+word;
+					analizeText +=" "+word;
+				}else {
+					analizeText +=word;
+					segment +=word;
+				}
 			} else if (isParagraph(start)) {
-				daily.get(day).getDay().add(segment);
-				analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
-				analizeFont +="\n" +word;				
-				segment = word;
-				if (font.contains("Bold") && daily.get(day).getDay().size()>1){
+				if (font.contains("Bold") && daily.get(day).getDay().size()>=1 && !daily.get(day).isHasTitle() ){
+					daily.get(day).getDay().add(segment);
 					daily.get(day).setHasTitle(true);
+					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
+					analizeText +="\n" +word;				
+					segment = word;
+				} else if(font.contains("Bold") && daily.get(day).getDay().size()>1 && daily.get(day).isHasTitle()){
+					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
+					analizeText += word;				
+					segment += word;	
+				} else{
+					daily.get(day).getDay().add(segment);
+					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
+					analizeText +="\n" +word;				
+					segment = word;					
 				}
 			} else{
 				segment += word;
-				analizeFont +=word;
+				analizeText +=word;
 			}
 		}
 	}
@@ -98,6 +115,13 @@ public class PDFController {
 		boolean newPara = x != 104 && x != 31 && x !=25 && y!= oldy;
 		oldy = (int) start.get(1);
 		return newPara;
+	}
+	
+	private boolean yChanged(Vector start){
+		int y = (int) start.get(1);
+		boolean changed = y!= oldy;
+		oldy = (int) start.get(1);
+		return changed;
 	}
 
 	private boolean isYbigger(Vector start) {
@@ -113,7 +137,7 @@ public class PDFController {
 	
 
 	public String getAnalizeFont() {
-		return analizeFont;
+		return analizeText;
 	}
 
 	public String getAnalizeX() {

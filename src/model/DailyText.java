@@ -28,6 +28,10 @@ public class DailyText {
 	public String getDatum(){
 		return datum;
 	}
+	
+	public String getMonth(){
+		return datum.split(" ")[0];
+	}
 
 	public boolean isHasTitle() {
 		return hasTitle;
