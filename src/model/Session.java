@@ -17,18 +17,16 @@ public class Session {
 
 	private PDFController pdfController;
 	private TextFileController textFileController;
-	private Stage currentStage;
+	private Stage[] stages = new Stage[3];
 	private ArrayList<DailyText> daily;
-	private Scene scene;	
 	
 	public Session() {}
 
 	public void initialize(Stage stage, Scene scene){
 		this.daily = new ArrayList<DailyText>();
-		this.currentStage=stage;
+		this.stages[0] = stage;
 		this.pdfController = new PDFController();
 		this.textFileController = new TextFileController();
-		this.scene=scene;
 	}
 
 	public PDFController getPDFController() {
@@ -39,19 +37,16 @@ public class Session {
 		return textFileController;
 	}
 
-	public Stage getCurrentStage() {
-		return currentStage;
+	public Stage getStage(int i) {
+		return stages[i];
+	}
+	
+	public void setStage(int i, Stage stage) {
+		 stages[i] = stage;
 	}
 	
 	public ArrayList<DailyText> getDaily(){
 		return daily;
 	}
-
-	public Scene getScene() {
-		return scene;
-	}
-
-
-	
 
 }

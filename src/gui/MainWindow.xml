@@ -3,27 +3,17 @@
 	<?import javafx.scene.layout.*?>
 	
 
-	<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="250.0" prefWidth="300.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.MainWindowController">
-
-	  <children>
-
+<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="250.0" prefWidth="300.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.MainWindowController">
+	<children>
 	    <HBox spacing="10">
-	    	<Label fx:id="inputLbl" alignment="CENTER_LEFT"
-	    		prefHeight="30.0" text="Select file" textAlignment="LEFT">
-	    	</Label>
+	    	<Label fx:id="inputLbl" alignment="CENTER_LEFT"	prefHeight="30.0" text="Select file" textAlignment="LEFT"/>
 	    	<Button fx:id="browse" text="Durchsuchen..." onAction="#onPressBrowse"></Button>
 	    </HBox>
-
-	    <TextField fx:id="tf_absolutePath" prefWidth="100.0" />
-
-	    <HBox spacing="10">
-	    	<ProgressBar fx:id="bar" ></ProgressBar>
-	    	
-	    </HBox>
-	    <Button fx:id="okBtn" onAction="#onPressOk" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="OK" textAlignment="CENTER" disable="true" >
-	    	</Button>
-
-	      <Button fx:id="analizeBtn" onAction="#onPressAnalize" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" text="Analize" textAlignment="CENTER" disable="true" >
-	    	</Button></children>
-
-	</VBox>
+	    <TextField fx:id="tf_absolutePath" prefWidth="100.0" />   	
+	    <Button fx:id="okBtn" onAction="#onPressOk"  text="OK" textAlignment="CENTER" disable="true" />
+	    <Button fx:id="analizeBtn" onAction="#onPressAnalize"  text="Analize" textAlignment="CENTER" disable="true" />
+	    <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0">
+	    	<Button onAction="#onPressClose"   text="Close" textAlignment="CENTER"  />
+	    </HBox> 
+	</children>
+</VBox>

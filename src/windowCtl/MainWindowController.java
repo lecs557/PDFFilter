@@ -33,30 +33,13 @@ public class MainWindowController {
 			pdf.readPDF(path, page);
 		}
 		xml.writeDailytxt();
-		Stage okstage = new Stage();
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/EvaluationWindow.xml")); 
-		Scene scene = new Scene(root);
-		okstage.setTitle("PDF Filter");
-		okstage.setScene(scene);        
-		okstage.show();    
+		openWindow("EvaluationWindow");
+		openWindow("AnalizeWindow");
 		
-		Stage stage = new Stage();
-		Parent anaRoot = FXMLLoader.load(getClass().getResource("/gui/AnalizeWindow.xml")); 
-		Scene anaScene = new Scene(anaRoot);
-		stage.setTitle("PDF Filter");
-		stage.setScene(anaScene);        
-		stage.show();    
 	}
 	@FXML
 	private void onPressAnalize() throws IOException{
-			
-		Stage stage = new Stage();
-		Parent root = FXMLLoader.load(getClass().getResource("/gui/AnalizeWindow.xml")); 
-		Scene scene = new Scene(root);
-		stage.setTitle("PDF Filter");
-		stage.setScene(scene);        
-		stage.show();    
-		
+		openWindow("AnalizeWindow");
 	}
 
 	@FXML
@@ -64,11 +47,35 @@ public class MainWindowController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		File file = fileChooser.showOpenDialog(Main.getSession()
-				.getCurrentStage());
+				.getStage(0));
 		tf_absolutePath.setText(file == null ? "" : file.getAbsolutePath());
 		if (tf_absolutePath != null) {
 			okBtn.setDisable(false);
 			analizeBtn.setDisable(false);
 		}
 	}
+	
+	@FXML
+	private void onPressClose(){
+		System.exit(0);
+	}
+	
+	private void openWindow(String window) throws IOException{
+		int i=0;
+		if (window.equals("EvaluationWindow"))
+			i=1;
+		if (window.equals("AnalizeWindow"))
+			i=2;
+		if (Main.getSession().getStage(i) == null){
+			Stage stage = new Stage();
+			Parent root = FXMLLoader.load(getClass().getResource("/gui/"+window+".xml")); 
+			Scene scene = new Scene(root);
+			stage.setTitle("PDF Filter");
+			stage.setScene(scene);        
+			stage.show();
+			Main.getSession().setStage(i, stage);
+		} else
+			Main.getSession().getStage(i).toFront();
+		
+		}
 }
