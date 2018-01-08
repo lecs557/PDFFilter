@@ -3,12 +3,16 @@ package windowCtl;
 import java.io.File;
 import java.io.IOException;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Main;
@@ -22,22 +26,62 @@ public class MainWindowController {
 	private Button okBtn;
 	@FXML
 	private Button analizeBtn;
+	@FXML
+	private ProgressBar bar;
+	
+	private int i=0;
+	
+	private Thread work = new Thread(){
+		public void run(){
+			try {
+			TextFileController xml = Main.getSession().getTextFileController();
+			PDFController pdf = Main.getSession().getPDFController();
+			String path = tf_absolutePath.getText();
+			for (i = 0; i <= 15; i++) {
+				int page = i + 1;
+				pdf.readPDF(path, page);
+			}	
+			xml.writeDailytxt();
+			okBtn.setDisable(true);
+			
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+	
+	private Thread process = new Thread(){
+		public void run(){	
+			while(i<15){
+				bar.setProgress(i/15f);
+				System.out.println(i);
+			}
+		}
+	};
+	
+	public void initialize(){
+		bar.setProgress(0);
+		process.start();
+		tf_absolutePath.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent arg0) {
+				work.start();
+			}	
+		});
+	}
+	
 
 	@FXML
 	private void onPressOk() throws IOException, InterruptedException {
-		TextFileController xml = Main.getSession().getTextFileController();
-		PDFController pdf = Main.getSession().getPDFController();
-		String path = tf_absolutePath.getText();
-		for (int i = 0; i <= 15; i++) {
-			int page = i + 1;
-			pdf.readPDF(path, page);
+		work.start();
+		if(i==15){
+			openWindow("EvaluationWindow");
+			openWindow("AnalizeWindow");			
 		}
-		xml.writeDailytxt();
-		okBtn.setDisable(true);
-		openWindow("EvaluationWindow");
-		openWindow("AnalizeWindow");
 		
 	}
+	
 	@FXML
 	private void onPressAnalize() throws IOException{
 		openWindow("AnalizeWindow");
@@ -82,6 +126,5 @@ public class MainWindowController {
 			Main.getSession().setStage(i, stage);
 		} else
 			Main.getSession().getStage(i).toFront();
-		
-		}
+	}
 }
