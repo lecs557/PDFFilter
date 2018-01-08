@@ -33,6 +33,7 @@ public class MainWindowController {
 			pdf.readPDF(path, page);
 		}
 		xml.writeDailytxt();
+		okBtn.setDisable(true);
 		openWindow("EvaluationWindow");
 		openWindow("AnalizeWindow");
 		
@@ -40,6 +41,7 @@ public class MainWindowController {
 	@FXML
 	private void onPressAnalize() throws IOException{
 		openWindow("AnalizeWindow");
+		openWindow("EvaluationWindow");
 	}
 
 	@FXML
@@ -71,7 +73,11 @@ public class MainWindowController {
 			Parent root = FXMLLoader.load(getClass().getResource("/gui/"+window+".xml")); 
 			Scene scene = new Scene(root);
 			stage.setTitle("PDF Filter");
-			stage.setScene(scene);        
+			stage.setScene(scene);
+			if (i==2)
+				stage.setX(280);
+			if (i==1)
+				stage.setX(820);
 			stage.show();
 			Main.getSession().setStage(i, stage);
 		} else

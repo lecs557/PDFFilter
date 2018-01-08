@@ -17,13 +17,13 @@ import com.itextpdf.text.pdf.parser.TextRenderInfo;
 import com.itextpdf.text.pdf.parser.Vector;
 
 /**
- * Reads the PDF-File and puts different segments of the file into separate
- * objects
+ * A handler which undertakes tasks which have to do the
+ * selected PDF-File
  * @author Marcel
  */
 public class PDFController {
 
-	private ArrayList<DailyText> daily;
+	private ArrayList<DailyText> days;
 	private String analizeText ="";
 	private String analizeX ="";
 	private String segment = "";
@@ -32,12 +32,13 @@ public class PDFController {
 	private int day = 0;
 
 	public PDFController() {
-		this.daily = Main.getSession().getDaily();
+		this.days = Main.getSession().getDaily();
 	}
 
 	/**
-	 * Scans PDF, invokes FontFilter, which executes createText having render
-	 * information.
+	 * Scans every word of the PDF-File, invokes <<FontFilter>> to get 
+	 * the render info which are given to <createText>
+	 * Can be invoked only for one page a time 
 	 * @param path @param page of the PDF-File
 	 */
 	public void readPDF(String path, int page) throws IOException {
@@ -45,15 +46,16 @@ public class PDFController {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
-		daily.add(new DailyText());
+		days.add(new DailyText());
 		oldy = 500;
 		segment="";
+		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
-		daily.get(day).getDay().add(segment);
+		days.get(day).getDay().add(segment);
 		createDatum();
 		analizeText += "\n------------" + day + "----\n";
-		analizeX += "------------" + day + "----\n";
+		analizeX += "\n------------" + day + "----\n";
 		isDate=false;
 		day++;
 	}
@@ -70,15 +72,15 @@ public class PDFController {
 		if (!word.equals("")) {
 			if (isYbigger(start) || isDate) {
 				if(!isDate){
-					daily.get(day).getDay().add(segment);
+					days.get(day).getDay().add(segment);
 					isDate = true;
-					analizeX += (int) start.get(0) + "  " + (int) start.get(1)+ " DATE\n";
+					analizeX += "\n"+(int) start.get(0) + "  " + (int) start.get(1)+ " DATE";
 					analizeText +="\n"+word;
 					segment = word;
 					yChanged(start);
 				}
 				else if(yChanged(start)){
-					analizeX += (int) start.get(0) + "  " + (int) start.get(1)+ " DATE\n";
+					analizeX += " "+(int) start.get(0) + "  " + (int) start.get(1)+ " D ";
 					segment += " "+word;
 					analizeText +=" "+word;
 				}else {
@@ -86,19 +88,19 @@ public class PDFController {
 					segment +=word;
 				}
 			} else if (isParagraph(start)) {
-				if (font.contains("Bold") && daily.get(day).getDay().size()>=1 && !daily.get(day).isHasTitle() ){
-					daily.get(day).getDay().add(segment);
-					daily.get(day).setHasTitle(true);
-					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
+				if (font.contains("Bold") && days.get(day).getDay().size()>=1 && !days.get(day).isHasTitle() ){
+					days.get(day).getDay().add(segment);
+					days.get(day).setHasTitle(true);
+					analizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
 					analizeText +="\n" +word;				
 					segment = word;
-				} else if(font.contains("Bold") && daily.get(day).getDay().size()>1 && daily.get(day).isHasTitle()){
+				} else if(font.contains("Bold") && days.get(day).getDay().size()>1 && days.get(day).isHasTitle()){
 					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
 					analizeText += word;				
 					segment += word;	
 				} else{
-					daily.get(day).getDay().add(segment);
-					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
+					days.get(day).getDay().add(segment);
+					analizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
 					analizeText +="\n" +word;				
 					segment = word;					
 				}
@@ -130,9 +132,9 @@ public class PDFController {
 	}
 
 	private void createDatum() {
-		int length = daily.get(day).getDay().size();
-		ArrayList<String> current = daily.get(day).getDay();
-		daily.get(day).setDatum(current.get(length - 1));
+		int length = days.get(day).getDay().size();
+		ArrayList<String> current = days.get(day).getDay();
+		days.get(day).setDatum(current.get(length - 1));
 	}
 	
 
