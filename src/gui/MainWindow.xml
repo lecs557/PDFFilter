@@ -3,7 +3,9 @@
 	<?import javafx.scene.layout.*?>
 	
 
-<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="250.0" prefWidth="300.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.MainWindowController">
+<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="250.0" prefWidth="300.0" 
+spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" 
+fx:controller="windowCtl.MainWindowController">
 	<children>
 	    <HBox spacing="10">
 	    	<Label fx:id="inputLbl" alignment="CENTER_LEFT"	prefHeight="30.0" text="Select file" textAlignment="LEFT"/>

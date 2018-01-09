@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public class DailyText {
 
-	private String datum;
 	private ArrayList<String> day;
+	private String datum;
 	private boolean hasTitle;
 	
 	public DailyText() {

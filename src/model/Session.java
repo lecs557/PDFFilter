@@ -1,9 +1,12 @@
 package model;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import controller.AnalizeController;
 import controller.PDFController;
 import controller.TextFileController;
 
@@ -15,17 +18,19 @@ import controller.TextFileController;
  */
 public class Session {
 
-	private DailyText today;
+	public enum window {MainWindow,EvaluationWindow,AnalizeWindow};
+	private Stage[] stages = new Stage[3];
+	private AnalizeController analizeController;
 	private PDFController pdfController;
 	private TextFileController textFileController;
-	private Stage[] stages = new Stage[3];
 	
 	public Session() {}
 
 	public void initialize(Stage stage, Scene scene){
 		this.stages[0] = stage;
-		this.pdfController = new PDFController();
 		this.textFileController = new TextFileController();
+		this.analizeController = new AnalizeController();
+		this.pdfController = new PDFController();
 	}
 
 	public PDFController getPDFController() {
@@ -35,20 +40,33 @@ public class Session {
 	public TextFileController getTextFileController() {
 		return textFileController;
 	}
+	
+	public Stage getStage(window window){
+		return stages[window.ordinal()];
+	}
 
-	public Stage getStage(int i) {
-		return stages[i];
+	public void openWindow(window window) throws IOException {
+		if (stages[window.ordinal()] == null){
+			Stage stage = new Stage();
+			Parent root = FXMLLoader.load(getClass().getResource("/gui/"+window.name()+".xml")); 
+			Scene scene = new Scene(root);
+			stage.setTitle("PDF Filter");
+			stage.setScene(scene);
+			if (window.ordinal()==2)
+				stage.setX(280);
+			if (window.ordinal()==1)
+				stage.setX(820);
+			stage.show();
+			stages[window.ordinal()]=stage;
+		} else
+			stages[window.ordinal()].show();;
 	}
 	
-	public void setStage(int i, Stage stage) {
-		 stages[i] = stage;
+	public void closeWindow(window window) {
+		stages[window.ordinal()].hide();
 	}
 
-	public DailyText getToday() {
-		return today;
-	}
-
-	public void setToday(DailyText today) {
-		this.today = today;
+	public AnalizeController getAnalizeController() {
+		return analizeController;
 	}
 }
