@@ -15,15 +15,14 @@ import controller.TextFileController;
  */
 public class Session {
 
+	private DailyText today;
 	private PDFController pdfController;
 	private TextFileController textFileController;
 	private Stage[] stages = new Stage[3];
-	private ArrayList<DailyText> daily;
 	
 	public Session() {}
 
 	public void initialize(Stage stage, Scene scene){
-		this.daily = new ArrayList<DailyText>();
 		this.stages[0] = stage;
 		this.pdfController = new PDFController();
 		this.textFileController = new TextFileController();
@@ -44,9 +43,12 @@ public class Session {
 	public void setStage(int i, Stage stage) {
 		 stages[i] = stage;
 	}
-	
-	public ArrayList<DailyText> getDaily(){
-		return daily;
+
+	public DailyText getToday() {
+		return today;
 	}
 
+	public void setToday(DailyText today) {
+		this.today = today;
+	}
 }

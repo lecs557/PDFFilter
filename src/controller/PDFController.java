@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import model.DailyText;
 import model.FontFilter;
 import model.Main;
+import model.Session;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;
@@ -23,7 +24,7 @@ import com.itextpdf.text.pdf.parser.Vector;
  */
 public class PDFController {
 
-	private ArrayList<DailyText> days;
+	private Session sess = Main.getSession();
 	private String analizeText ="";
 	private String analizeX ="";
 	private String segment = "";
@@ -31,10 +32,7 @@ public class PDFController {
 	private int oldy = 500;
 	private int day = 0;
 
-	public PDFController() {
-		this.days = Main.getSession().getDaily();
-	}
-
+	
 	/**
 	 * Scans every word of the PDF-File, invokes <<FontFilter>> to get 
 	 * the render info which are given to <createText>
@@ -46,13 +44,14 @@ public class PDFController {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
-		days.add(new DailyText());
+		DailyText today = new DailyText();
+		sess.setToday(today);
 		oldy = 500;
 		segment="";
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
-		days.get(day).getDay().add(segment);
+		today.getDay().add(segment);
 		createDatum();
 		analizeText += "\n------------" + day + "----\n";
 		analizeX += "\n------------" + day + "----\n";
@@ -72,7 +71,7 @@ public class PDFController {
 		if (!word.equals("")) {
 			if (isYbigger(start) || isDate) {
 				if(!isDate){
-					days.get(day).getDay().add(segment);
+					sess.getToday().getDay().add(segment);
 					isDate = true;
 					analizeX += "\n"+(int) start.get(0) + "  " + (int) start.get(1)+ " DATE";
 					analizeText +="\n"+word;
@@ -88,18 +87,18 @@ public class PDFController {
 					segment +=word;
 				}
 			} else if (isParagraph(start)) {
-				if (font.contains("Bold") && days.get(day).getDay().size()>=1 && !days.get(day).isHasTitle() ){
-					days.get(day).getDay().add(segment);
-					days.get(day).setHasTitle(true);
+				if (font.contains("Bold") && sess.getToday().getDay().size()>=1 && !sess.getToday().isHasTitle() ){
+					sess.getToday().getDay().add(segment);
+					sess.getToday().setHasTitle(true);
 					analizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
 					analizeText +="\n" +word;				
 					segment = word;
-				} else if(font.contains("Bold") && days.get(day).getDay().size()>1 && days.get(day).isHasTitle()){
+				} else if(font.contains("Bold") &&sess.getToday().getDay().size()>=1 && sess.getToday().isHasTitle()){
 					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
 					analizeText += word;				
 					segment += word;	
 				} else{
-					days.get(day).getDay().add(segment);
+					sess.getToday().getDay().add(segment);
 					analizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
 					analizeText +="\n" +word;				
 					segment = word;					
@@ -132,9 +131,8 @@ public class PDFController {
 	}
 
 	private void createDatum() {
-		int length = days.get(day).getDay().size();
-		ArrayList<String> current = days.get(day).getDay();
-		days.get(day).setDatum(current.get(length - 1));
+		int length = sess.getToday().getDay().size();
+		sess.getToday().setDatum( sess.getToday().getDay().get(length-1) );
 	}
 	
 

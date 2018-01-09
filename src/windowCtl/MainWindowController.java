@@ -29,7 +29,7 @@ public class MainWindowController {
 	private enum window {MainWindow,EvaluationWindow,AnalizeWindow};
 	private int startPage=0;
 	private int i=startPage;
-	private int endPage=35;
+	private int endPage=15;
 	
 	private Thread work = new Thread(){
 		public void run(){
@@ -42,8 +42,9 @@ public class MainWindowController {
 				for (i = startPage; i <= endPage; i++) {
 					int page = i + 1;
 					pdf.readPDF(path, page);
+					xml.writeDailytxt();
 				}	
-				xml.writeDailytxt();
+				analizeBtn.setDisable(false);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,13 +53,10 @@ public class MainWindowController {
 	};
 	
 	private Thread process = new Thread(){
-		public void run(){	
-			System.out.println( "running");
+		public void run(){		
 			while(i<=endPage){		
 				bar.setProgress((i-startPage)/(float) (endPage-startPage));
 			}
-			System.out.println("stop");
-			analizeBtn.setDisable(false);
 		}
 	};
 	
@@ -96,18 +94,18 @@ public class MainWindowController {
 	}
 	
 	private void openWindow(window window) throws IOException{
-			if (Main.getSession().getStage(window.ordinal()) == null){
-				Stage stage = new Stage();
-				Parent root = FXMLLoader.load(getClass().getResource("/gui/"+window.name()+".xml")); 
-				Scene scene = new Scene(root);
-				stage.setTitle("PDF Filter");
-				stage.setScene(scene);
-				if (window.ordinal()==2)
-					stage.setX(280);
-				if (window.ordinal()==1)
-					stage.setX(820);
-				stage.show();
-				Main.getSession().setStage(window.ordinal(), stage);
+		if (Main.getSession().getStage(window.ordinal()) == null){
+			Stage stage = new Stage();
+			Parent root = FXMLLoader.load(getClass().getResource("/gui/"+window.name()+".xml")); 
+			Scene scene = new Scene(root);
+			stage.setTitle("PDF Filter");
+			stage.setScene(scene);
+			if (window.ordinal()==2)
+				stage.setX(280);
+			if (window.ordinal()==1)
+				stage.setX(820);
+			stage.show();
+			Main.getSession().setStage(window.ordinal(), stage);
 		} else
 			Main.getSession().getStage(window.ordinal()).show();;
 	}
