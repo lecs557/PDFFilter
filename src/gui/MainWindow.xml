@@ -10,7 +10,7 @@
 	    	<Button fx:id="browse" text="Durchsuchen..." onAction="#onPressBrowse"></Button>
 	    </HBox>
 	    <TextField fx:id="tf_absolutePath" prefWidth="100.0" />   
-	    <ProgressBar fx:id="bar"/>	
+	    <ProgressBar fx:id="bar" prefWidth="180"/>	
 	    <Button fx:id="okBtn" onAction="#onPressOk"  text="OK" textAlignment="CENTER" disable="true" />
 	    <Button fx:id="analizeBtn" onAction="#onPressAnalize"  text="Analize" textAlignment="CENTER" disable="true" />
 	    <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0">
