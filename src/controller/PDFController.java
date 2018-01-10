@@ -24,13 +24,13 @@ public class PDFController {
 	private AnalizeController analize = Main.getSession().getAnalizeController();
 	
 	private DailyText today;
-	private String analizeText ="";
-	private String analizeX ="";
+	private String todayAnalizeText ="";
+	private String todayAnalizeX ="";
 	private String segment = "";
 	
 	private boolean isDate = false;
 	private int oldy = 500;
-	private int day = 0;
+	private int day=0;
 
 	
 	/**
@@ -46,18 +46,20 @@ public class PDFController {
 				new LocationTextExtractionStrategy(), info);
 		oldy = 500;
 		segment="";
+		todayAnalizeText="";
+		todayAnalizeX="";
 		today = new DailyText();
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
 		today.getDay().add(segment);
 		createDatum();
-		analizeText += "\n------------" + day + "----\n";
-		analizeX += "\n------------" + day + "----\n";
+		todayAnalizeText += "\n------------" + (day+Main.getSession().getStart()) + "---------\n";
+		todayAnalizeX += "\n------------" + (day+Main.getSession().getStart())+ "---------\n";
 		isDate=false;
 		day++;
-		analize.setAnalizeText(analizeText);
-		analize.setAnalizeX(analizeX);
+		analize.setTodayAnalizeText(todayAnalizeText);
+		analize.setTodayAnalizeX(todayAnalizeX);
 	}
 
 	/**
@@ -74,39 +76,39 @@ public class PDFController {
 				if(!isDate){
 					today.getDay().add(segment);
 					isDate = true;
-					analizeX += "\n"+(int) start.get(0) + "  " + (int) start.get(1)+ " DATE";
-					analizeText +="\n"+word;
+					todayAnalizeX += "\n"+(int) start.get(0) + "  " + (int) start.get(1)+ " DATE";
+					todayAnalizeText +="\n"+word;
 					segment = word;
 					yChanged(start);
 				}
 				else if(yChanged(start)){
-					analizeX += " "+(int) start.get(0) + "  " + (int) start.get(1)+ " D ";
+					todayAnalizeX += " "+(int) start.get(0) + "  " + (int) start.get(1)+ " D ";
 					segment += " "+word;
-					analizeText +=" "+word;
+					todayAnalizeText +=" "+word;
 				}else {
-					analizeText +=word;
+					todayAnalizeText +=word;
 					segment +=word;
 				}
 			} else if (isParagraph(start)) {
 				if (font.contains("Bold") && today.getDay().size()>=1 && !today.isHasTitle() ){
 					today.getDay().add(segment);
 					today.setHasTitle(true);
-					analizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
-					analizeText +="\n" +word;				
+					todayAnalizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
+					todayAnalizeText +="\n" +word;				
 					segment = word;
 				} else if(font.contains("Bold") && today.getDay().size()>=1 && today.isHasTitle()){
-					analizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
-					analizeText += word;				
+					todayAnalizeX +=(int) start.get(0) + "  " + (int) start.get(1)+ "\n";
+					todayAnalizeText += word;				
 					segment += word;	
 				} else{
 					today.getDay().add(segment);
-					analizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
-					analizeText +="\n" +word;				
+					todayAnalizeX +="\n"+(int) start.get(0) + "  " + (int) start.get(1);
+					todayAnalizeText +="\n" +word;				
 					segment = word;					
 				}
 			} else{
 				segment += word;
-				analizeText +=word;
+				todayAnalizeText +=word;
 			}
 		}
 	}
@@ -137,11 +139,11 @@ public class PDFController {
 	}
 	
 	public String getAnalizeFont() {
-		return analizeText;
+		return todayAnalizeText;
 	}
 
 	public String getAnalizeX() {
-		return analizeX;
+		return todayAnalizeX;
 	}
 
 	public DailyText getToday() {

@@ -23,7 +23,16 @@ public class Session {
 	private AnalizeController analizeController;
 	private PDFController pdfController;
 	private TextFileController textFileController;
+	private int start;
 	
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
 	public Session() {}
 
 	public void initialize(Stage stage, Scene scene){
