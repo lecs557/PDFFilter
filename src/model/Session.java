@@ -6,6 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import com.itextpdf.text.pdf.PdfReader;
+
 import controller.AnalizeController;
 import controller.PDFController;
 import controller.TextFileController;
@@ -24,36 +27,14 @@ public class Session {
 	private PDFController pdfController;
 	private TextFileController textFileController;
 	private int start;
+	private PdfReader pdfReader;
 	
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
 	public Session() {}
-
-	public void initialize(Stage stage, Scene scene){
+	
+	public void initialize(Stage stage){
 		this.stages[0] = stage;
-		this.textFileController = new TextFileController();
-		this.analizeController = new AnalizeController();
-		this.pdfController = new PDFController();
-	}
-
-	public PDFController getPDFController() {
-		return pdfController;
-	}
-
-	public TextFileController getTextFileController() {
-		return textFileController;
 	}
 	
-	public Stage getStage(window window){
-		return stages[window.ordinal()];
-	}
-
 	public void openWindow(window window) throws IOException {
 		if (stages[window.ordinal()] == null){
 			Stage stage = new Stage();
@@ -68,11 +49,55 @@ public class Session {
 			stage.show();
 			stages[window.ordinal()]=stage;
 		} else
-			stages[window.ordinal()].show();;
+			stages[window.ordinal()].show();
 	}
 	
 	public void closeWindow(window window) {
 		stages[window.ordinal()].hide();
+	}
+	
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public PDFController getPDFController() {
+		return pdfController;
+	}
+
+	public TextFileController getTextFileController() {
+		return textFileController;
+	}
+	
+	public Stage getStage(window window){
+		return stages[window.ordinal()];
+	}
+
+	public PDFController getPdfController() {
+		return pdfController;
+	}
+
+	public void setPdfController(PDFController pdfController) {
+		this.pdfController = pdfController;
+	}
+
+	public PdfReader getPdfReader() {
+		return pdfReader;
+	}
+
+	public void setPdfReader(PdfReader pdfReader) {
+		this.pdfReader = pdfReader;
+	}
+
+	public void setAnalizeController(AnalizeController analizeController) {
+		this.analizeController = analizeController;
+	}
+
+	public void setTextFileController(TextFileController textFileController) {
+		this.textFileController = textFileController;
 	}
 
 	public AnalizeController getAnalizeController() {

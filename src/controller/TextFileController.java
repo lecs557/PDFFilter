@@ -12,7 +12,7 @@ import model.Main;
 
 public class TextFileController {
 	private DailyText today;
-	private int j = 0;
+	private int j = Main.getSession().getStart();
 	private int errorCounter = 0;
 	private boolean isError;
 	
@@ -26,7 +26,7 @@ public class TextFileController {
 		try{
 			today = Main.getSession().getPDFController().getToday();
 		int length = today.getDay().size();
-			FileOutputStream bw = new FileOutputStream("C:\\Users\\User\\Desktop\\Russisch\\"+ (j+Main.getSession().getStart())+" " +today.getDatum() + ".txt");
+			FileOutputStream bw = new FileOutputStream("C:\\Users\\User\\Desktop\\Russisch\\"+ j +" " +today.getDatum() + ".txt");
 			Writer fw = new BufferedWriter(new OutputStreamWriter(bw,
 					StandardCharsets.UTF_8));
 			for (int i = 0; i < length-1; i++) {
@@ -47,7 +47,6 @@ public class TextFileController {
 			fw.close();
 			
 		} catch(Exception e){
-			j++;
 			errorCounter++;
 			isError =true;
 		}

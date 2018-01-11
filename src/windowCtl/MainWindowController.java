@@ -6,8 +6,6 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import model.Main;
@@ -21,48 +19,39 @@ import controller.PDFController;
 import controller.TextFileController;
 
 public class MainWindowController {
-	private Session sess;
-	private TextFileController tfc;
-	private PDFController pdf;
-	private AnalizeController analize;
+	private Session session = Main.getSession();;
+	private TextFileController tfctrl;
+	private PDFController pdfctrl;
+	private AnalizeController analizectrl;
+	
 	@FXML
-	private TextField tf_absolutePath;
+	private TextField tf_absolutePath, tf_pages;
 	@FXML
-	private Button okBtn;
-	@FXML
-	private Button analizeBtn;
+	private Button okBtn, analizeBtn;
 	@FXML
 	private ProgressBar bar;
 	@FXML
 	private TextField tf_startPage, tf_endPage;
-	@FXML
-	private TextField tf_pages;
-	
+		
+	private PdfReader reader;
 	private int pages;
 	private int start;
 	private int i=start;
 	private int end;
 	
-
 	private Thread work = new Thread(){
 		public void run(){
 			try {
-				sess = Main.getSession();
-				tfc = Main.getSession().getTextFileController();
-				pdf = Main.getSession().getPDFController();
-				analize = Main.getSession().getAnalizeController();
 				start = Integer.parseInt(tf_startPage.getText());
 				end = Integer.parseInt(tf_endPage.getText());
 				okBtn.setDisable(true);
+				setVariables();
 				process.start();
-				String path = tf_absolutePath.getText();
-				sess.setStart(start);
-				for (i = start; i <= end; i++) {
-					int page = i + 1;
-					pdf.readPDF(path, page);
-					tfc.writeDailytxt();
-					analize.analize();
-					
+				for (i = start; i < end; i++) {
+					int page = i;
+					pdfctrl.readPDF(page);
+					tfctrl.writeDailytxt();
+					analizectrl.analize();
 				}	
 				analizeBtn.setDisable(false);
 			} catch (IOException e) {
@@ -86,14 +75,14 @@ public class MainWindowController {
 	
 
 	@FXML
-	private void onPressOk() throws IOException, InterruptedException {
+	private void onPressOk() {
 		work.start();
 	}
 	
 	@FXML
 	private void onPressAnalize() throws IOException{
-		sess.openWindow(window.EvaluationWindow);
-		sess.openWindow(window.AnalizeWindow);		
+		session.openWindow(window.EvaluationWindow);
+		session.openWindow(window.AnalizeWindow);		
 	}
 
 	@FXML
@@ -107,8 +96,13 @@ public class MainWindowController {
 			okBtn.setDisable(false);
 			tf_startPage.setDisable(false);
 			tf_endPage.setDisable(false);
-			help();
+			reader = new PdfReader(tf_absolutePath.getText());
+			pages = reader.getNumberOfPages();	
 			tf_pages.setText(""+pages);
+		} else{
+			tf_startPage.setDisable(true);
+			tf_endPage.setDisable(true);
+			okBtn.setDisable(true);
 		}
 	}
 	
@@ -122,7 +116,7 @@ public class MainWindowController {
 		try{
 			if( Integer.parseInt(tf_startPage.getText()) > Integer.parseInt(tf_endPage.getText()) )
 				okBtn.setDisable(true);
-			else if(Integer.parseInt(tf_endPage.getText()) > pages)
+			else if(Integer.parseInt(tf_endPage.getText()) > pages || Integer.parseInt(tf_startPage.getText())==0)
 				okBtn.setDisable(true);
 			else
 				okBtn.setDisable(false);	
@@ -131,11 +125,16 @@ public class MainWindowController {
 		}
 	}
 	
-	private void help() throws IOException{
-		PdfReader reader = new PdfReader(tf_absolutePath.getText());
-		pages = reader.getNumberOfPages();
-		
-		
+	
+	private void setVariables(){
+		session.setStart(start);
+		session.setPdfReader(reader);
+		tfctrl = new TextFileController();
+		session.setTextFileController(tfctrl);
+		analizectrl = new AnalizeController();
+		session.setAnalizeController(analizectrl);
+		pdfctrl = new PDFController();
+		session.setPdfController(pdfctrl);
 		
 	}
 }

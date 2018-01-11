@@ -20,7 +20,7 @@ fx:controller="windowCtl.MainWindowController">
 	    </HBox>   
 	    <HBox spacing="10">
 	    	<Label 	prefHeight="30.0" text="Start" textAlignment="LEFT"/>
-	    	<TextField fx:id="tf_startPage" prefWidth="50" onKeyReleased="#validatePages" text="0" disable="true"/>
+	    	<TextField fx:id="tf_startPage" prefWidth="50" onKeyReleased="#validatePages" text="1" disable="true"/>
 	    	<Label 	prefHeight="30.0" text="End" textAlignment="LEFT"/>
 	    	<TextField fx:id="tf_endPage" prefWidth ="50" text="20" onKeyReleased="#validatePages" disable="true" />
 	    </HBox>   

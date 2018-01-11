@@ -5,6 +5,7 @@ import java.io.IOException;
 import model.DailyText;
 import model.FontFilter;
 import model.Main;
+import model.Session;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;
@@ -21,7 +22,9 @@ import com.itextpdf.text.pdf.parser.Vector;
  * @author Marcel
  */
 public class PDFController {	
-	private AnalizeController analize = Main.getSession().getAnalizeController();
+	private Session session = Main.getSession();
+	private AnalizeController analize = session.getAnalizeController();
+	private PdfReader reader = session.getPdfReader();
 	
 	private DailyText today;
 	private String todayAnalizeText ="";
@@ -30,7 +33,7 @@ public class PDFController {
 	
 	private boolean isDate = false;
 	private int oldy = 500;
-	private int day=0;
+	private int day=session.getStart();
 
 	
 	/**
@@ -39,8 +42,7 @@ public class PDFController {
 	 * Can be invoked only for one page a time 
 	 * @param path @param page of the PDF-File
 	 */
-	public void readPDF(String path, int page) throws IOException {
-		PdfReader reader = new PdfReader(path);
+	public void readPDF(int page) throws IOException {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
@@ -54,12 +56,13 @@ public class PDFController {
 				strategy);
 		today.getDay().add(segment);
 		createDatum();
-		todayAnalizeText += "\n------------" + (day+Main.getSession().getStart()) + "---------\n";
-		todayAnalizeX += "\n------------" + (day+Main.getSession().getStart())+ "---------\n";
+		todayAnalizeText += "\n------------" + day + "---------\n";
+		todayAnalizeX += "\n------------" + day+ "---------\n";
 		isDate=false;
-		day++;
 		analize.setTodayAnalizeText(todayAnalizeText);
 		analize.setTodayAnalizeX(todayAnalizeX);
+		if(! session.getTextFileController().isError())
+			day++;
 	}
 
 	/**
