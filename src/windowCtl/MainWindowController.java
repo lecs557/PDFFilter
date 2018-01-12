@@ -47,7 +47,7 @@ public class MainWindowController {
 				okBtn.setDisable(true);
 				setVariables();
 				process.start();
-				for (i = start; i < end; i++) {
+				for (i = start; i <= end; i++) {
 					int page = i;
 					pdfctrl.readPDF(page);
 					tfctrl.writeDailytxt();

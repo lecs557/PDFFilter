@@ -56,13 +56,12 @@ public class PDFController {
 				strategy);
 		today.getDay().add(segment);
 		createDatum();
-		todayAnalizeText += "\n------------" + day + "---------\n";
-		todayAnalizeX += "\n------------" + day+ "---------\n";
+		todayAnalizeText += "\n------------Seite " + day + "---------\n";
+		todayAnalizeX += "\n------------Seite " + day+ "---------\n";
 		isDate=false;
 		analize.setTodayAnalizeText(todayAnalizeText);
 		analize.setTodayAnalizeX(todayAnalizeX);
-		if(! session.getTextFileController().isError())
-			day++;
+		day++;
 	}
 
 	/**

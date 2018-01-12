@@ -47,6 +47,7 @@ public class TextFileController {
 			fw.close();
 			
 		} catch(Exception e){
+			j++;
 			errorCounter++;
 			isError =true;
 		}
