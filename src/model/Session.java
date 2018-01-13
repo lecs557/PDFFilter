@@ -27,6 +27,7 @@ public class Session {
 	private PDFController pdfController;
 	private TextFileController textFileController;
 	private int start;
+	private String destination;
 	private PdfReader pdfReader;
 	
 	public Session() {}
@@ -102,5 +103,13 @@ public class Session {
 
 	public AnalizeController getAnalizeController() {
 		return analizeController;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
 	}
 }

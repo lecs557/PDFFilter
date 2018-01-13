@@ -26,7 +26,7 @@ public class TextFileController {
 		try{
 			today = Main.getSession().getPDFController().getToday();
 		int length = today.getDay().size();
-			FileOutputStream bw = new FileOutputStream("C:\\Users\\User\\Desktop\\Russisch\\"+ j +" " +today.getDatum() + ".txt");
+			FileOutputStream bw = new FileOutputStream(Main.getSession().getDestination()+ j +" " +today.getDatum() + ".txt");
 			Writer fw = new BufferedWriter(new OutputStreamWriter(bw,
 					StandardCharsets.UTF_8));
 			for (int i = 0; i < length-1; i++) {

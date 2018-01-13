@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import model.Main;
 import model.Session;
@@ -25,9 +26,9 @@ public class MainWindowController {
 	private AnalizeController analizectrl;
 	
 	@FXML
-	private TextField tf_absolutePath, tf_pages;
+	private TextField tf_absolutePath, tf_pages, tf_pathDes ;
 	@FXML
-	private Button okBtn, analizeBtn;
+	private Button okBtn, analizeBtn, browseDesBtn;
 	@FXML
 	private ProgressBar bar;
 	@FXML
@@ -99,10 +100,26 @@ public class MainWindowController {
 			reader = new PdfReader(tf_absolutePath.getText());
 			pages = reader.getNumberOfPages();	
 			tf_pages.setText(""+pages);
+			tf_pathDes.setText("C:\\Users\\User\\Desktop\\Russisch\\");
+			browseDesBtn.setDisable(false);
 		} else{
 			tf_startPage.setDisable(true);
 			tf_endPage.setDisable(true);
 			okBtn.setDisable(true);
+			browseDesBtn.setDisable(true);
+			tf_pathDes.setText("");
+		}
+	}
+
+	@FXML
+	private void onPressBrowseDes() throws IOException {
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle("Open Resource File");
+		File file = directoryChooser.showDialog(Main.getSession()
+				.getStage(window.MainWindow));
+		tf_pathDes.setText(file == null ? "" : file.getAbsolutePath());
+		if (tf_pathDes == null) {
+			tf_pathDes.setText("C:\\Users\\User\\Desktop\\Russisch\\");
 		}
 	}
 	
@@ -128,6 +145,7 @@ public class MainWindowController {
 	
 	private void setVariables(){
 		session.setStart(start);
+		session.setDestination(tf_pathDes.getText());
 		session.setPdfReader(reader);
 		tfctrl = new TextFileController();
 		session.setTextFileController(tfctrl);
