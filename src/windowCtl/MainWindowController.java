@@ -9,6 +9,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import model.Main;
 import model.Session;
 import model.Session.window;
@@ -40,27 +41,32 @@ public class MainWindowController {
 	private int i=start;
 	private int end;
 	
-	private Thread work = new Thread(){
-		public void run(){
-			try {
-				start = Integer.parseInt(tf_startPage.getText());
-				end = Integer.parseInt(tf_endPage.getText());
-				okBtn.setDisable(true);
-				setVariables();
-				process.start();
-				for (i = start; i <= end; i++) {
-					int page = i;
-					pdfctrl.readPDF(page);
-					tfctrl.writeDailytxt();
-					analizectrl.analize();
-				}	
-				analizeBtn.setDisable(false);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	public void initialize(){
+		bar.setProgress(0);
+	}
+	
+	@FXML
+	private void onPressBrowse() throws IOException {
+		File file = setupFileChooser().showOpenDialog(Main.getSession()
+				.getStage(window.MainWindow));
+		if (file != null) {
+			tf_absolutePath.setText(file.getAbsolutePath());
+			setupForFile(true);
+			filter(3,4);
+			System.out.println("OPEN");
+		} else{
+			tf_absolutePath.setText("");
+			setupForFile(false);
 		}
-	};
+	}
+	
+	@FXML
+	private void onPressOk() {
+		int s = Integer.parseInt(tf_startPage.getText());
+		int e = Integer.parseInt(tf_endPage.getText());
+		okBtn.setDisable(true);
+		filter(s,e);
+	}
 	
 	private Thread process = new Thread(){
 		public void run(){		
@@ -70,46 +76,33 @@ public class MainWindowController {
 		}
 	};
 	
-	public void initialize(){
-		bar.setProgress(0);
+	private void setupForFile(boolean file) throws IOException{
+		okBtn.setDisable(!file);
+		tf_startPage.setDisable(!file);
+		tf_endPage.setDisable(!file);
+		browseDesBtn.setDisable(!file);
+		tf_pathDes.setText("");		
+		if(file){
+			reader = new PdfReader(tf_absolutePath.getText());
+			pages = reader.getNumberOfPages();	
+			tf_pages.setText(""+pages);
+			tf_pathDes.setText("C:\\Users\\User\\Desktop\\Russisch\\");		
+		}
+		
 	}
-	
-
-	@FXML
-	private void onPressOk() {
-		work.start();
+	private FileChooser setupFileChooser(){
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Resource File");
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("PDF-Files", "*.pdf"));
+		return fileChooser;
 	}
 	
 	@FXML
 	private void onPressAnalize() throws IOException{
 		session.openWindow(window.EvaluationWindow);
-		session.openWindow(window.AnalizeWindow);		
+		session.openWindow(window.OptionsWindow);		
 	}
 
-	@FXML
-	private void onPressBrowse() throws IOException {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Resource File");
-		File file = fileChooser.showOpenDialog(Main.getSession()
-				.getStage(window.MainWindow));
-		tf_absolutePath.setText(file == null ? "" : file.getAbsolutePath());
-		if (tf_absolutePath != null) {
-			okBtn.setDisable(false);
-			tf_startPage.setDisable(false);
-			tf_endPage.setDisable(false);
-			reader = new PdfReader(tf_absolutePath.getText());
-			pages = reader.getNumberOfPages();	
-			tf_pages.setText(""+pages);
-			tf_pathDes.setText("C:\\Users\\User\\Desktop\\Russisch\\");
-			browseDesBtn.setDisable(false);
-		} else{
-			tf_startPage.setDisable(true);
-			tf_endPage.setDisable(true);
-			okBtn.setDisable(true);
-			browseDesBtn.setDisable(true);
-			tf_pathDes.setText("");
-		}
-	}
 
 	@FXML
 	private void onPressBrowseDes() throws IOException {
@@ -153,6 +146,31 @@ public class MainWindowController {
 		session.setAnalizeController(analizectrl);
 		pdfctrl = new PDFController();
 		session.setPdfController(pdfctrl);
+		
+	}
+	
+	private void filter(int s, int e){
+		start=s;
+		end=e;
+		new Thread(){
+			public void run(){
+				try {
+					setVariables();					
+					process.start();
+					for (i = start; i <= end; i++) {
+						int page = i;
+						pdfctrl.readPDF(page);
+						tfctrl.writeDailytxt();
+						analizectrl.analize();
+					}	
+					analizeBtn.setDisable(false);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}.start();
+		System.out.println("ENDE");
 		
 	}
 }

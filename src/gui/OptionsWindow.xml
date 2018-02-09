@@ -1,0 +1,23 @@
+
+	<?import javafx.scene.control.*?>
+	<?import javafx.scene.layout.*?>
+	
+
+<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="500.0" prefWidth="500.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.OptionsWindowController">
+	 <children>
+		<HBox prefHeight="400.0">
+			<VBox fx:id="textVB">
+				
+			</VBox>
+			<VBox fx:id="fontVB" prefWidth="250.0">
+				
+			</VBox>
+			<VBox fx:id="xVB" prefWidth="250.0">
+				
+			</VBox>
+		</HBox>
+		<HBox alignment="BOTTOM_RIGHT">
+			<Button onAction="#onPressClose" text="Close" textAlignment="CENTER" />
+	    </HBox>	
+	</children>
+</VBox>

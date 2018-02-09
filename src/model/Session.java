@@ -21,8 +21,8 @@ import controller.TextFileController;
  */
 public class Session {
 
-	public enum window {MainWindow,EvaluationWindow,AnalizeWindow};
-	private Stage[] stages = new Stage[3];
+	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
+	private Stage[] stages = new Stage[4];
 	private AnalizeController analizeController;
 	private PDFController pdfController;
 	private TextFileController textFileController;
@@ -63,10 +63,6 @@ public class Session {
 
 	public void setStart(int start) {
 		this.start = start;
-	}
-
-	public PDFController getPDFController() {
-		return pdfController;
 	}
 
 	public TextFileController getTextFileController() {

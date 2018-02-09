@@ -2,60 +2,63 @@ package controller;
 
 import java.util.ArrayList;
 
-import model.DailyText;
+import model.TextOfToday;
 import model.Main;
+import model.Paragraph;
 import model.Session;
 
 public class AnalizeController {
 	private Session session = Main.getSession();
 	private TextFileController tfc = session.getTextFileController();
-	private DailyText today;
+	private TextOfToday today;
 	
-	private ArrayList<ArrayList<String>> amountOfSegments = new ArrayList<ArrayList<String>>();
-	private ArrayList<String> analizeText = new ArrayList<String>();
-	private ArrayList<String> analizeX = new ArrayList<String>();
-	private ArrayList<String> amountOfMonthSegments;
-	private String todayAnalizeText;
-	private String todayAnalizeX;
+	private ArrayList<String> daysSegments;
+	private ArrayList<ArrayList<String>> monthList = new ArrayList<ArrayList<String>>();
+	
+	private ArrayList<String> textList = new ArrayList<String>();
+	private ArrayList<String> positionList = new ArrayList<String>();
+	private ArrayList<String> fontList = new ArrayList<String>();
 	
 	private String month="";
 	private int k = session.getStart();
+	private boolean analyzeOnly=true;
 	
 	
 	
 	public void analize(){
-		today = Main.getSession().getPDFController().getToday();
-		if (!tfc.isError()){
-			if ( month.equals(today.getMonth()) ){
-				amountOfMonthSegments.add(k +" "+ (today.getDay().size()-(today.isHasTitle()?4:3)));	
-				
-			} else{
-				amountOfMonthSegments = new ArrayList<String>();
-				amountOfSegments.add(amountOfMonthSegments);
-				amountOfMonthSegments.add(k +" "+ (today.getDay().size()-(today.isHasTitle()?4:3)));
-				month = today.getMonth();
+		today = Main.getSession().getPdfController().getTextOfToday();
+		
+		if (!analyzeOnly){
+			if (!tfc.isError()){
+				if ( month.equals(today.getMonth()) ){
+					daysSegments.add(k +" "+ (today.getDay().size()-(today.isHasTitle()?4:3)));	
+					
+				} else{
+					daysSegments = new ArrayList<String>();
+					monthList.add(daysSegments);
+					daysSegments.add(k +" "+ (today.getDay().size()-(today.isHasTitle()?4:3)));
+					month = today.getMonth();
+				}
 			}
 		}
-			analizeText.add(todayAnalizeText);
-			analizeX.add(todayAnalizeX);
+		for(Paragraph para:today.getDay()){
+			textList.add(para.getParagraph());
+			fontList.add(para.getFont());
+			positionList.add(para.getPosition());
+		}
 			k++;
 	}
 	
-	
-	
-	public void setTodayAnalizeText(String analizeText) {
-		this.todayAnalizeText = analizeText;
-	}
-	public void setTodayAnalizeX(String analizeX) {
-		this.todayAnalizeX = analizeX;
-	}
 	public ArrayList<ArrayList<String>> getAmountOfSegments() {
-		return amountOfSegments;
+		return monthList;
 	}
 	public ArrayList<String> getAnalizeText() {
-		return analizeText;
+		return textList;
+	}
+	public ArrayList<String> getAnalizeFont() {
+		return fontList;
 	}
 	public ArrayList<String> getAnalizeX() {
-		return analizeX;
+		return positionList;
 	}
 }

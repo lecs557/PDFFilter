@@ -7,17 +7,17 @@ import java.util.ArrayList;
  * a daily text has
  * @author Marcel
  */
-public class DailyText {
+public class TextOfToday {
 
-	private ArrayList<String> day;
+	private ArrayList<Paragraph> day;
 	private String datum;
 	private boolean hasTitle;
 	
-	public DailyText() {
-		day = new ArrayList<String>();
+	public TextOfToday() {
+		day = new ArrayList<Paragraph>();
 	}
 	
-	public ArrayList<String> getDay(){
+	public ArrayList<Paragraph> getDay(){
 		return day;
 	}
 	
