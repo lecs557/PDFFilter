@@ -1,28 +1,38 @@
 package windowCtl;
 
+import java.util.ArrayList;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import model.Main;
-import model.Paragraph;
+import model.Paragraph.detail;
 import model.Session.window;
 import controller.AnalizeController;
-import controller.PDFController;
 
 public class OptionsWindowController {
 	
 	@FXML
+	private VBox detailVB;
+	@FXML
+	private VBox textVB;
+	@FXML
 	private VBox fontVB;
 	@FXML
 	private VBox xVB;
-	@FXML
-	private VBox textVB;
 	
 	public void initialize(){
 		int i=0;
 		AnalizeController pdfC = Main.getSession().getAnalizeController();
 		
 		for (String para:pdfC.getAnalizeText()){
+			
+			ChoiceBox<String> detailCB = new ChoiceBox<String>(FXCollections.observableArrayList(getDetails()));
+			detailCB.setValue(detail.values()[pdfC.getDetails().get(i)].name());
+			detailVB.getChildren().add(detailCB);
 			TextField text = new TextField();
 			text.setText(para);
 			textVB.getChildren().add(text);
@@ -34,12 +44,19 @@ public class OptionsWindowController {
 			xVB.getChildren().add(pos);
 			i++;
 		}
-		System.out.println(i);
 	}
 	
 	@FXML
 	private void onPressClose(){
 		Main.getSession().closeWindow(window.OptionsWindow);
+	}
+	
+	private ArrayList<String> getDetails(){
+		ArrayList<String> details = new ArrayList<String>();
+		for(detail d:detail.values()){
+			details.add(d.name());
+		}
+		return details;
 	}
 
 }

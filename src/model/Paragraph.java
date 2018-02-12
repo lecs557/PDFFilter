@@ -4,6 +4,7 @@ import com.itextpdf.text.pdf.parser.Vector;
 
 public class Paragraph {
 	
+	public enum detail {Vers, Passage, Heading, Paragraph};
 	private String paragraph;
 	private String font;
 	private String position;
@@ -18,6 +19,10 @@ public class Paragraph {
 	
 	public void add (String word){
 		paragraph += word;
+	}
+	
+	public void setDetail(detail detail){
+		ordDetail = detail.ordinal();
 	}
 	
 	public String getParagraph() {

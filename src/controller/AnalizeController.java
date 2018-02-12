@@ -18,6 +18,7 @@ public class AnalizeController {
 	private ArrayList<String> textList = new ArrayList<String>();
 	private ArrayList<String> positionList = new ArrayList<String>();
 	private ArrayList<String> fontList = new ArrayList<String>();
+	private ArrayList<Integer> detailList = new ArrayList<Integer>();
 	
 	private String month="";
 	private int k = session.getStart();
@@ -42,6 +43,7 @@ public class AnalizeController {
 			}
 		}
 		for(Paragraph para:today.getDay()){
+			detailList.add(para.getOrdDetail());
 			textList.add(para.getParagraph());
 			fontList.add(para.getFont());
 			positionList.add(para.getPosition());
@@ -60,5 +62,8 @@ public class AnalizeController {
 	}
 	public ArrayList<String> getAnalizeX() {
 		return positionList;
+	}
+	public ArrayList<Integer> getDetails() {
+		return detailList;
 	}
 }

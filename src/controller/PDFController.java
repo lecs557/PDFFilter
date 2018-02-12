@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import model.Paragraph.detail;
 import model.TextOfToday;
 import model.FontFilter;
 import model.Main;
@@ -30,6 +31,8 @@ public class PDFController {
 	
 	private TextOfToday textOfToday;
 	
+	boolean isSetVers;
+	boolean isSetPassage;
 	private String oldFont = "";
 	private int oldSize = 0;
 	private int oldY = 500;
@@ -48,6 +51,8 @@ public class PDFController {
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
 		oldY = 500;
+		isSetPassage = false;
+		isSetVers = false;
 		textOfToday = new TextOfToday();
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
@@ -70,21 +75,20 @@ public class PDFController {
 		
 		if (!word.equals("") && y!=43 ) { //y=43 : Seitenzahl
 			
-			if (!sameFont(font, size) && newLine(y)){
-				System.out.println("1 Change" );
-				
+			if (!sameFont(font, size) && newLine(y)){			
 				if(font.contains("Bold")){
-					startParagraph(word, font, startBase, size);							 				
+					startParagraph(word, font, startBase, size);
+					chooseDetail(isSetVers, detail.Vers, detail.Heading);
+					isSetVers=true;
 				}else{
 					startParagraph(word, font, startBase, size);					
-				}
+					chooseDetail(isSetPassage, detail.Passage, detail.Paragraph);
+					isSetPassage = true;
+					}
 			}
-//			else if(!sameFont(font, size) && !newLine(y)){
-//				startParagraph(word, font, startBase, size);
-//			}
 			else if (!belongsToCurrentParagraph(startBase, size)) {
 				startParagraph(word, font, startBase, size);
-				System.out.println("----------2 Change" );
+				currentParagraph.setDetail(detail.Paragraph);
 			} else{
 				currentParagraph.add(word);
 			}
@@ -116,7 +120,14 @@ public class PDFController {
 	private void startParagraph(String word, String font, Vector start, int size){
 		currentParagraph = new Paragraph(word, font, start, size);
 		textOfToday.getDay().add(currentParagraph);
-		
+	}
+	
+	private void chooseDetail(boolean isSet, detail detail, detail switchTo){
+		if(!isSet){
+			currentParagraph.setDetail(detail);
+		}else{
+			currentParagraph.setDetail(switchTo);
+		}
 	}
 	public TextOfToday getTextOfToday() {
 		return textOfToday;
