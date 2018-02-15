@@ -2,6 +2,7 @@ package windowCtl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -92,8 +93,10 @@ public class MainWindowController {
 		session.openWindow(window.OptionsWindow);		
 	}
 
-	@FXML private void onPressPre(){
-		filter(5,6);
+	@FXML
+	private void onPressPre(){
+		int rn = new Random().nextInt(reader.getNumberOfPages()-2) + 1;
+		filter(rn,rn+1);
 		analizeBtn.setDisable(false);
 	}
 	
@@ -119,6 +122,8 @@ public class MainWindowController {
 	 void filter(int s, int e){
 		start=s;
 		end=e;
+		session.setStart(start);
+		session.setEnd(end);
 		startFiltering();
 		
 	}

@@ -66,7 +66,7 @@ public class PDFController {
 	 * @param rinfo
 	 */
 	public void createText(TextRenderInfo rinfo) {
-		String word = rinfo.getText().replace("-", "");
+		String word = rinfo.getText().replace("- ", "");
 		String font = rinfo.getFont().getPostscriptFontName();
 		Vector startBase = rinfo.getBaseline().getStartPoint();
 		Vector startAscent = rinfo.getAscentLine().getStartPoint();
@@ -118,7 +118,7 @@ public class PDFController {
 	private boolean belongsToCurrentParagraph(Vector start, int size) {
 		int x = (int) start.get(0);
 		int y = (int) start.get(1);
-		boolean btcp = y - oldY == 0 ||  -5 < oldX -x &&  oldX - x < 95 && oldX < 130 && oldY - y < size*3;
+		boolean btcp = y - oldY == 0 ||  -5 < oldX -x &&  oldX - x < 95 && oldX < 120 && oldY - y < size*3;
 		return btcp;
 	}
 	

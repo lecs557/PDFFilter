@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,8 @@ import controller.AnalizeController;
 
 public class OptionsWindowController {
 	
+	@FXML
+	private Label lb;
 	@FXML
 	private VBox detailVB;
 	@FXML
@@ -35,7 +38,7 @@ public class OptionsWindowController {
 	public void initialize(){
 		int i=0;
 		AnalizeController pdfC = Main.getSession().getAnalizeController();
-		
+		lb.setText("Seite:"+Main.getSession().getStart());
 		for (String para:pdfC.getAnalizeText()){
 			ChoiceBox<String> detailCB = new ChoiceBox<String>(FXCollections.observableArrayList(getDetails()));
 			detailCB.setValue(detail.values()[pdfC.getDetails().get(i)].name());

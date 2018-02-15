@@ -5,6 +5,7 @@
 
 <VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="500.0" prefWidth="1100.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.OptionsWindowController">
 	 <children>
+	 <Label fx:id="lb"></Label>
 		<HBox prefHeight="400.0">
 			<VBox fx:id="detailVB" prefWidth="100" />
 			<VBox fx:id="textVB" prefWidth="250" />

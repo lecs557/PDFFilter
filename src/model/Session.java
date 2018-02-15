@@ -28,6 +28,7 @@ public class Session {
 	private PDFController pdfController;
 	private TextFileController textFileController;
 	private int start;
+	private int end;
 	private String destination;
 	private PdfReader pdfReader;
 	private ArrayList<Integer> yIgnore = new ArrayList<Integer>();	
@@ -131,5 +132,13 @@ public class Session {
 
 	public void setFontIgnore(ArrayList<String> fontIgnore) {
 		this.fontIgnore = fontIgnore;
+	}
+
+	public int getEnd() {
+		return end;
+	}
+
+	public void setEnd(int end) {
+		this.end = end;
 	}
 }

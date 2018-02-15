@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import model.Main;
 import model.Paragraph;
+import model.Session;
 import model.TextOfToday;
 
 public class TextFileController {
@@ -36,7 +37,7 @@ public class TextFileController {
 			if(i==length-1)
 				fw.append("ENDEDESKAPTELS\r\n\r\n");
 		}					
-		if(counter==1){
+		if(counter== (Main.getSession().getEnd() - Main.getSession().getStart()) ){
 			fw.close();
 		}
 		counter++;
