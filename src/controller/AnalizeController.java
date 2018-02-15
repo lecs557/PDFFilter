@@ -28,21 +28,18 @@ public class AnalizeController {
 	
 	public void analize(){
 		today = Main.getSession().getPdfController().getTextOfToday();
-		
-		if (!analyzeOnly){
-			if (!tfc.isError()){
-				if ( month.equals(today.getMonth()) ){
-					daysSegments.add(k +" "+ (today.getDay().size()-(today.isHasTitle()?4:3)));	
-					
-				} else{
-					daysSegments = new ArrayList<String>();
-					monthList.add(daysSegments);
-					daysSegments.add(k +" "+ (today.getDay().size()-(today.isHasTitle()?4:3)));
-					month = today.getMonth();
-				}
-			}
-		}
-		for(Paragraph para:today.getDay()){
+
+//		if ( month.equals(today.getMonth()) ){
+//			daysSegments.add(k +" "+ (today.getContent().size()-(today.isHasTitle()?4:3)));	
+//			
+//		} else{
+//			daysSegments = new ArrayList<String>();
+//			monthList.add(daysSegments);
+//			daysSegments.add(k +" "+ (today.getContent().size()-(today.isHasTitle()?4:3)));
+//			month = today.getMonth();
+//		}
+	
+		for(Paragraph para:today.getContent()){
 			detailList.add(para.getOrdDetail());
 			textList.add(para.getParagraph());
 			fontList.add(para.getFont());

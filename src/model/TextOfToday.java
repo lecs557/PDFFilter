@@ -17,7 +17,7 @@ public class TextOfToday {
 		day = new ArrayList<Paragraph>();
 	}
 	
-	public ArrayList<Paragraph> getDay(){
+	public ArrayList<Paragraph> getContent(){
 		return day;
 	}
 	

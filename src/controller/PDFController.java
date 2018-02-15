@@ -31,8 +31,9 @@ public class PDFController {
 	
 	private TextOfToday textOfToday;
 	
-	boolean isSetVers;
-	boolean isSetPassage;
+	ArrayList<String> fonts = new ArrayList<String>();
+	private boolean isSetVers;
+	private boolean isSetPassage;
 	private String oldFont = "";
 	private int oldSize = 0;
 	private int oldY = 500;
@@ -73,7 +74,15 @@ public class PDFController {
 		int x = (int) startBase.get(0);
 		int size = (int) (startAscent.get(1)-startBase.get(1));
 		
-		if (!word.equals("") && y!=43 ) { //y=43 : Seitenzahl
+		if(fontIgnore(font)){
+			font=oldFont;
+			size=oldSize;
+		}
+		
+		if (!fonts.contains(font))
+			fonts.add(font);
+		
+		if (!word.equals("") &&  !yIgnore(y)  ) { //y=43 : Seitenzahl
 			
 			if (!sameFont(font, size) && newLine(y)){			
 				if(font.contains("Bold")){
@@ -85,27 +94,31 @@ public class PDFController {
 					chooseDetail(isSetPassage, detail.Passage, detail.Paragraph);
 					isSetPassage = true;
 					}
-			}
-			else if (!belongsToCurrentParagraph(startBase, size)) {
+			}else if (!belongsToCurrentParagraph(startBase, size)) {
 				startParagraph(word, font, startBase, size);
 				currentParagraph.setDetail(detail.Paragraph);
 			} else{
 				currentParagraph.add(word);
 			}
-		if(newLine(y)) {		
-			oldX = x;
+			if(newLine(y)) {		
+				oldX = x;
+			}
+			oldFont=font;
+			oldY = y;		
+			oldSize = size;			
 		}
-		oldFont=font;
-		oldY = y;		
-		oldSize = size;
-		}
+		
 	}
 	
+
+	public ArrayList<String> getFonts() {
+		return fonts;
+	}
 
 	private boolean belongsToCurrentParagraph(Vector start, int size) {
 		int x = (int) start.get(0);
 		int y = (int) start.get(1);
-		boolean btcp = y - oldY == 0 ||  -5 < oldX -x &&  oldX - x < 18 && oldY - y < size*2;
+		boolean btcp = y - oldY == 0 ||  -5 < oldX -x &&  oldX - x < 95 && oldX < 130 && oldY - y < size*3;
 		return btcp;
 	}
 	
@@ -116,10 +129,26 @@ public class PDFController {
 	private boolean newLine(int y){
 		return y != oldY;
 	}
+	
+	private boolean yIgnore(int y){
+		for(int c:session.getyIgnore()){
+			if (y==c)
+				return true;
+		}
+		return false;
+	}
+	
+	private boolean fontIgnore(String font){
+		for(String c:session.getFontIgnore()){
+			if (font.equals(c))
+				return true;
+		}
+		return false;
+	}
 
 	private void startParagraph(String word, String font, Vector start, int size){
 		currentParagraph = new Paragraph(word, font, start, size);
-		textOfToday.getDay().add(currentParagraph);
+		textOfToday.getContent().add(currentParagraph);
 	}
 	
 	private void chooseDetail(boolean isSet, detail detail, detail switchTo){

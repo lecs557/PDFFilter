@@ -27,8 +27,9 @@ fx:controller="windowCtl.MainWindowController">
 		<ProgressBar fx:id="bar" prefWidth="210"/>	
 	    </HBox>
 		<HBox spacing="10">
-	    	<Button fx:id="okBtn" onAction="#onPressOk"  text="OK" textAlignment="CENTER" disable="true" />
+	    	<Button fx:id="preBtn" onAction="#onPressPre"  text="PrView" textAlignment="CENTER" disable="true" />
 	    	<Button fx:id="analizeBtn" onAction="#onPressAnalize"  text="Options" textAlignment="CENTER" disable="true" />
+	    	<Button fx:id="okBtn" onAction="#onPressOk"  text="Create" textAlignment="CENTER" disable="true" />
 	    </HBox>
 	    <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0">
 	    	<Button onAction="#onPressClose"   text="Close" textAlignment="CENTER"  />

@@ -29,7 +29,7 @@ public class MainWindowController {
 	@FXML
 	private TextField tf_absolutePath, tf_pathDes ;
 	@FXML
-	private Button okBtn, analizeBtn, browseDesBtn;
+	private Button okBtn, analizeBtn, browseDesBtn, preBtn;
 	@FXML
 	private ProgressBar bar;
 	
@@ -48,13 +48,20 @@ public class MainWindowController {
 		File file = setupFileChooser().showOpenDialog(Main.getSession()
 				.getStage(window.MainWindow));
 		if (file != null) {
+			reader = new PdfReader(file.getAbsolutePath());
 			tf_absolutePath.setText(file.getAbsolutePath());
-			reader = new PdfReader(tf_absolutePath.getText());
-			filter(3,4);
+			setupForFile(true);
 		} else{
 			tf_absolutePath.setText("");
-			analizeBtn.setDisable(true);
+			setupForFile(false);
 		}
+	}
+	
+	private void setupForFile(boolean file){
+		preBtn.setDisable(!file);
+		okBtn.setDefaultButton(!file);
+		browseDesBtn.setDisable(!file);
+		tf_pathDes.setText(!file ? "" : "C:\\");
 	}
 	
 	@FXML
@@ -63,15 +70,14 @@ public class MainWindowController {
 		directoryChooser.setTitle("Open Resource File");
 		File file = directoryChooser.showDialog(Main.getSession()
 				.getStage(window.MainWindow));
-		tf_pathDes.setText(file == null ? "" : file.getAbsolutePath());
-		if (tf_pathDes == null) {
-			tf_pathDes.setText("C:\\Users\\User\\Desktop\\Russisch\\");
+		if (tf_pathDes != null) {
+			tf_pathDes.setText(file.getAbsolutePath());
 		}
 	}
 	
 	@FXML
 	private void onPressOk(){
-		
+		filter(1,reader.getNumberOfPages());
 	}
 	
 	private FileChooser setupFileChooser(){
@@ -86,6 +92,10 @@ public class MainWindowController {
 		session.openWindow(window.OptionsWindow);		
 	}
 
+	@FXML private void onPressPre(){
+		filter(5,6);
+		analizeBtn.setDisable(false);
+	}
 	
 	@FXML
 	private void onPressClose(){
@@ -96,6 +106,7 @@ public class MainWindowController {
 		session.setStart(start);
 		session.setDestination(tf_pathDes.getText());
 		session.setPdfReader(reader);
+		session.refreshStages();
 		tfctrl = new TextFileController();
 		session.setTextFileController(tfctrl);
 		analizectrl = new AnalizeController();

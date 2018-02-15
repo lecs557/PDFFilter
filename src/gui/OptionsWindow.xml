@@ -3,16 +3,26 @@
 	<?import javafx.scene.layout.*?>
 	
 
-<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="500.0" prefWidth="700.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.OptionsWindowController">
+<VBox stylesheets="gui/MainWindowStyle.css" fx:id="vbox" prefHeight="500.0" prefWidth="1100.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="windowCtl.OptionsWindowController">
 	 <children>
 		<HBox prefHeight="400.0">
-			<VBox fx:id="detailVB" prefWidth="100"/>
-			<VBox fx:id="textVB" prefWidth="250"/>
-			<VBox fx:id="fontVB" prefWidth="250.0"/>
-			<VBox fx:id="xVB" prefWidth="100"/>
+			<VBox fx:id="detailVB" prefWidth="100" />
+			<VBox fx:id="textVB" prefWidth="250" />
+			<VBox fx:id="fontVB" prefWidth="250.0" />
+			<VBox fx:id="xVB" prefWidth="100" />
+			<VBox fx:id="fontsVB">
+				<Label text="Font ignorieren" />
+			</VBox>
+			<VBox fx:id="ignoredVB">
+				<Label text="Y wieder akzeptieren" />
+			</VBox>
+			<VBox fx:id="ignoredFontVB">
+				<Label text="Font wieder akzeptieren" />
+			</VBox>
 		</HBox>
 		<HBox alignment="BOTTOM_RIGHT">
 			<Button onAction="#onPressClose" text="Close" textAlignment="CENTER" />
+			<Button onAction="#onPressOK" text="OK" textAlignment="CENTER" />
 	    </HBox>	
 	</children>
 </VBox>

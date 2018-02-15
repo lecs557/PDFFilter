@@ -30,7 +30,7 @@ public class EvaluationWindowController {
 		tfc = Main.getSession().getTextFileController();
 		analize = Main.getSession().getAnalizeController();
 		
-		sum.setText("Gesamt: "+ tfc.getDays()+" Tage(+"+tfc.getErrorCounter()+" Fehler)");
+		sum.setText("Gesamt: ");
 		
 		for(ArrayList<String> aos : analize.getAmountOfSegments()){
 			createTA();

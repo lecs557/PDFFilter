@@ -7,14 +7,15 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-import model.TextOfToday;
 import model.Main;
+import model.Paragraph;
+import model.TextOfToday;
 
 public class TextFileController {
 	private TextOfToday today;
-	private int j = Main.getSession().getStart();
-	private int errorCounter = 0;
-	private boolean isError;
+	private int counter = 0;
+	private FileOutputStream bw;
+	private Writer fw; 
 	
 	/**
 	 * writes the daily-objects in different files and
@@ -22,47 +23,40 @@ public class TextFileController {
 	 * @throws IOException
 	 */
 	public void writeDailytxt() throws IOException {
-//		isError = false;
-//		try{
-//			today = Main.getSession().getPdfController().getDay();
-//		int length = today.getDay().size();
-//			FileOutputStream bw = new FileOutputStream(Main.getSession().getDestination()+ j +" " +today.getDatum() + ".txt");
-//			Writer fw = new BufferedWriter(new OutputStreamWriter(bw,
-//					StandardCharsets.UTF_8));
-//			for (int i = 0; i < length-1; i++) {
-//				if (i==0){
-//					fw.append("VERS    "+today.getDay().get(i) + " VERS\r\n\r\n");
-//				}else if (i==1){
-//					fw.append("Stelle    "+today.getDay().get(i) + " Stelle\r\n\r\n");
-//				} else if(i==2 && today.isHasTitle()){
-//					fw.append("Title    "+today.getDay().get(i) + " Title\r\n\r\nTEXT\r\n");
-//				}else if(i==2){
-//					fw.append("TEXT\r\nPARAGRAPH    "+today.getDay().get(i) + "\r\n");
-//				}else if(i==length-2){
-//					fw.append("PARAGRAPH    "+today.getDay().get(i) + "\r\nTEXT");
-//				}else
-//					fw.append("PARAGRAPH    "+today.getDay().get(i) + "\r\n");
-//			}
-//			j++;
-//			fw.close();
-//			
-//		} catch(Exception e){
-//			j++;
-//			errorCounter++;
-//			isError =true;
-//		}
+		today = Main.getSession().getPdfController().getTextOfToday();
+		
+		if(fw==null){
+			bw = new FileOutputStream(Main.getSession().getDestination()+"\\productTitle.txt");
+			fw = new BufferedWriter(new OutputStreamWriter(bw,				
+					StandardCharsets.UTF_8));
+		}
+		int length = today.getContent().size();
+		for (int i = 0; i < length; i++) {
+			write(i);
+			if(i==length-1)
+				fw.append("ENDEDESKAPTELS\r\n\r\n");
+		}					
+		if(counter==1){
+			fw.close();
+		}
+		counter++;
 	}
 	
-	public boolean isError() {
-		return isError;
+	private void write(int i) throws IOException{
+		Paragraph paragraph = today.getContent().get(i);
+		switch (paragraph.getOrdDetail()){
+		case 0:
+			fw.append("[{product_id:2,number:"+counter+",title:"+paragraph.getParagraph()+",text:\r\n");
+			break;
+		case 1:
+			fw.append("<h1>"+paragraph.getParagraph()+"</h1>\r\n");
+			break;
+		case 2:
+			fw.append("<b>"+paragraph.getParagraph()+"</b>");
+			break;
+		case 3:
+			fw.append("<p style=\"margin-left:0cm; margin-right:0cm\">"+paragraph.getParagraph()+"</p>\r\n");
+			break;			
+		}
 	}
-
-	public int getDays(){
-		return j;
-	}
-
-	public int getErrorCounter() {
-		return errorCounter;
-	}
-
 }
