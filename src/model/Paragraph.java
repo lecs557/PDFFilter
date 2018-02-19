@@ -5,15 +5,16 @@ import com.itextpdf.text.pdf.parser.Vector;
 public class Paragraph {
 	
 	public enum detail {Vers, Passage, Heading, Paragraph};
+	public enum style {Bold, Italic, Normal}
+	private int ordDetail;
 	private String paragraph;
 	private String font;
 	private String position;
-	private int ordDetail;
 	
 	
-	public Paragraph(String para, String font, Vector pos, int size) {
+	public Paragraph(String para, style style, Vector pos, int size) {
 		this.paragraph = para;
-		this.font = font+" "+size;
+		this.font = style.name()+" "+size;
 		this.position = (int)pos.get(0)+" "+(int)pos.get(1);
 	}
 	
@@ -24,7 +25,6 @@ public class Paragraph {
 	public void setDetail(detail detail){
 		ordDetail = detail.ordinal();
 	}
-	
 	public String getParagraph() {
 		return paragraph;
 	}
@@ -32,7 +32,7 @@ public class Paragraph {
 		return ordDetail;
 	}
 	public String getFont() {
-		return font;
+		return font +" Words: "+paragraph.split(" ").length;
 	}
 	public String getPosition() {
 		return position;

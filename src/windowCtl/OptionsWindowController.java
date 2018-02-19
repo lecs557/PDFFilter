@@ -58,27 +58,6 @@ public class OptionsWindowController {
 			i++;
 		}
 		
-		for(String fo:Main.getSession().getPdfController().getFonts()){
-			CheckBox chb = new CheckBox();
-			TextField ftf = new TextField();
-			ftf.setText(fo);;
-			ftf.setEditable(false);
-			HBox fontsHB = new HBox();
-			fontsHB.getChildren().add(chb);
-			fontsHB.getChildren().add(ftf);
-			fontsVB.getChildren().add(fontsHB);
-		}
-		
-		for(String fo:Main.getSession().getFontIgnore()){
-			CheckBox chb = new CheckBox();
-			TextField ftf = new TextField();
-			ftf.setText(fo);
-			ftf.setEditable(false);
-			HBox fontsHB = new HBox();
-			fontsHB.getChildren().add(chb);
-			fontsHB.getChildren().add(ftf);
-			ignoredFontVB.getChildren().add(fontsHB);
-		}
 		
 		for(int y:Main.getSession().getyIgnore()){
 			CheckBox chb = new CheckBox();
@@ -100,15 +79,7 @@ public class OptionsWindowController {
 	@FXML
 	private void onPressOK(){
 		ArrayList<Integer> yIgnore = Main.getSession().getyIgnore();
-		ArrayList<String> fontIgnore = Main.getSession().getFontIgnore();
 		
-		for (int i=1;i<fontIgnore.size()+1;i++){
-			HBox hbox = (HBox) ignoredFontVB.getChildren().get(i);
-			CheckBox chb = (CheckBox) hbox.getChildren().get(0);
-			if(chb.isSelected())
-				fontIgnore.remove(i-1);
-							
-		}
 		
 		for (int i=1;i<yIgnore.size()+1;i++){
 			HBox hbox = (HBox) ignoredVB.getChildren().get(i);
@@ -125,20 +96,7 @@ public class OptionsWindowController {
 				String y = tf.getText().split(" ")[1];
 				yIgnore.add(Integer.parseInt(y));
 			}
-		}
-
-		for ( int i=1;i<fontsVB.getChildren().size();i++ ){
-			HBox hbox = (HBox) fontsVB.getChildren().get(i);
-			CheckBox chb = (CheckBox) hbox.getChildren().get(0);
-			if(chb.isSelected()){
-				TextField tf = (TextField) hbox.getChildren().get(1);
-				String font = tf.getText();
-				fontIgnore.add(font);
-				System.out.println(font);
-			}
 		}		
-		
-		Main.getSession().setFontIgnore(fontIgnore);
 		Main.getSession().setyIgnore(yIgnore);
 		Main.getSession().closeWindow(window.OptionsWindow);
 	}

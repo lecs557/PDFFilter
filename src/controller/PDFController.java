@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import model.Paragraph.detail;
+import model.Paragraph.style;
 import model.TextOfToday;
 import model.FontFilter;
 import model.Main;
@@ -31,10 +32,9 @@ public class PDFController {
 	
 	private TextOfToday textOfToday;
 	
-	ArrayList<String> fonts = new ArrayList<String>();
-	private boolean isSetVers;
-	private boolean isSetPassage;
-	private String oldFont = "";
+	private int xVers;
+
+	private style oldStyle = style.Normal;
 	private int oldSize = 0;
 	private int oldY = 500;
 	private int oldX = 0;
@@ -51,9 +51,8 @@ public class PDFController {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
+		xVers=0;
 		oldY = 500;
-		isSetPassage = false;
-		isSetVers = false;
 		textOfToday = new TextOfToday();
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
@@ -74,56 +73,49 @@ public class PDFController {
 		int x = (int) startBase.get(0);
 		int size = (int) (startAscent.get(1)-startBase.get(1));
 		
-		if(fontIgnore(font)){
-			font=oldFont;
-			size=oldSize;
-		}
+		style style = createSryle(font);
 		
-		if (!fonts.contains(font))
-			fonts.add(font);
 		
-		if (!word.equals("") &&  !yIgnore(y)  ) { //y=43 : Seitenzahl
-			
-			if (!sameFont(font, size) && newLine(y)){			
-				if(font.contains("Bold")){
-					startParagraph(word, font, startBase, size);
-					chooseDetail(isSetVers, detail.Vers, detail.Heading);
-					isSetVers=true;
-				}else{
-					startParagraph(word, font, startBase, size);					
-					chooseDetail(isSetPassage, detail.Passage, detail.Paragraph);
-					isSetPassage = true;
-					}
-			}else if (!belongsToCurrentParagraph(startBase, size)) {
-				startParagraph(word, font, startBase, size);
-				currentParagraph.setDetail(detail.Paragraph);
-			} else{
+		if (!word.equals("") &&  !yIgnore(y)  ) { 
+			if (changedStyleOrSize(style, size)){
+				if(xVers==0)
+					xVers=x;
+				startParagraph(word, style, startBase, size);
+				chooseDetail(style, x);
+			} else if(!belongsToCurrentParagraph(startBase, size)) {
+				startParagraph(word, style, startBase, size);
+				chooseDetail(style, x);
+			} else if (belongsToCurrentParagraph(startBase, size)){
 				currentParagraph.add(word);
 			}
 			if(newLine(y)) {		
 				oldX = x;
 			}
-			oldFont=font;
+			oldStyle=style;
 			oldY = y;		
 			oldSize = size;			
 		}
-		
 	}
 	
 
-	public ArrayList<String> getFonts() {
-		return fonts;
+	private style createSryle (String temp){
+		style style = model.Paragraph.style.Normal;
+		for(style f:style.values()){
+			if (temp.contains(f.name()))
+				style = f;
+		}	
+		return style;
 	}
 
 	private boolean belongsToCurrentParagraph(Vector start, int size) {
 		int x = (int) start.get(0);
 		int y = (int) start.get(1);
-		boolean btcp = y - oldY == 0 ||  -5 < oldX -x &&  oldX - x < 95 && oldX < 120 && oldY - y < size*3;
+		boolean btcp = y - oldY == 0 ||  -5 < oldX -x &&  oldX - x < 95 && oldX < 120 && oldY - y < size*2.2f;
 		return btcp;
 	}
 	
-	private boolean sameFont(String font, int size){
-		return font.equals(oldFont) && size == oldSize;
+	private boolean changedStyleOrSize(style style, int size){
+		return style != oldStyle || size != oldSize;
 	}
 
 	private boolean newLine(int y){
@@ -137,26 +129,30 @@ public class PDFController {
 		}
 		return false;
 	}
-	
-	private boolean fontIgnore(String font){
-		for(String c:session.getFontIgnore()){
-			if (font.equals(c))
-				return true;
-		}
-		return false;
-	}
 
-	private void startParagraph(String word, String font, Vector start, int size){
-		currentParagraph = new Paragraph(word, font, start, size);
+	private void startParagraph(String word, style style, Vector start, int size){
+		currentParagraph = new Paragraph(word, style, start, size);
 		textOfToday.getContent().add(currentParagraph);
 	}
 	
-	private void chooseDetail(boolean isSet, detail detail, detail switchTo){
-		if(!isSet){
-			currentParagraph.setDetail(detail);
-		}else{
-			currentParagraph.setDetail(switchTo);
+	private void chooseDetail(style style, int x){
+		switch(style.ordinal()){
+		case (0) :
+			if(x==xVers)
+				currentParagraph.setDetail(detail.Vers); 
+			else
+				currentParagraph.setDetail(detail.Heading);
+			break;
+		case(1):
+			currentParagraph.setDetail(detail.Passage); 		
+		case(2):
+			if(x>120)
+				currentParagraph.setDetail(detail.Passage); 
+			else
+				currentParagraph.setDetail(detail.Paragraph);
+			break;
 		}
+		
 	}
 	public TextOfToday getTextOfToday() {
 		return textOfToday;

@@ -9,9 +9,8 @@ import java.util.ArrayList;
  */
 public class TextOfToday {
 
-	private ArrayList<Paragraph> day;
 	private String datum;
-	private boolean hasTitle;
+	private ArrayList<Paragraph> day;
 	
 	public TextOfToday() {
 		day = new ArrayList<Paragraph>();
@@ -20,24 +19,14 @@ public class TextOfToday {
 	public ArrayList<Paragraph> getContent(){
 		return day;
 	}
-	
 	public void setDatum(String datum) {
 		this.datum = datum;
 	}
-
 	public String getDatum(){
 		return datum;
 	}
-	
 	public String getMonth(){
 		return datum.split(" ")[0];
 	}
 
-	public boolean isHasTitle() {
-		return hasTitle;
-	}
-
-	public void setHasTitle(boolean hasTitle) {
-		this.hasTitle = hasTitle;
-	}
 }
