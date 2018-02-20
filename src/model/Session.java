@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.Vector;
 
 import controller.AnalizeController;
 import controller.PDFController;
@@ -31,8 +32,7 @@ public class Session {
 	private int end;
 	private String destination;
 	private PdfReader pdfReader;
-	private ArrayList<Integer> yIgnore = new ArrayList<Integer>();	
-	private ArrayList<String> fontIgnore = new ArrayList<String>();	
+	private ArrayList<Vector> posDate = new ArrayList<Vector>();	
 	public Session() {}
 	
 	public void initialize(Stage stage){
@@ -118,22 +118,13 @@ public class Session {
 		this.destination = destination;
 	}
 
-	public ArrayList<Integer> getyIgnore() {
-		return yIgnore;
+	public ArrayList<Vector> getPosDate() {
+		return posDate;
 	}
 
-	public void setyIgnore(ArrayList<Integer> yIgnore) {
-		this.yIgnore = yIgnore;
+	public void setPosDate(ArrayList<Vector> posDate) {
+		this.posDate = posDate;
 	}
-
-	public ArrayList<String> getFontIgnore() {
-		return fontIgnore;
-	}
-
-	public void setFontIgnore(ArrayList<String> fontIgnore) {
-		this.fontIgnore = fontIgnore;
-	}
-
 	public int getEnd() {
 		return end;
 	}

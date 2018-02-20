@@ -3,6 +3,7 @@ package windowCtl;
 import java.util.ArrayList;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -13,9 +14,15 @@ import javafx.scene.layout.VBox;
 import model.Main;
 import model.Paragraph.detail;
 import model.Session.window;
+
+import com.itextpdf.text.pdf.parser.Vector;
+
 import controller.AnalizeController;
 
 public class OptionsWindowController {
+	
+	AnalizeController pdfC = Main.getSession().getAnalizeController();
+	ArrayList<Vector> posDate = Main.getSession().getPosDate();
 	
 	@FXML
 	private Label lb;
@@ -37,36 +44,20 @@ public class OptionsWindowController {
 	
 	public void initialize(){
 		int i=0;
-		AnalizeController pdfC = Main.getSession().getAnalizeController();
-		lb.setText("Seite:"+Main.getSession().getStart());
+		lb.setText("Seite:"+Main.getSession().getStart() + " Datum " + Main.getSession().getPdfController().getTextOfToday().getDatum());
 		for (String para:pdfC.getAnalizeText()){
-			ChoiceBox<String> detailCB = new ChoiceBox<String>(FXCollections.observableArrayList(getDetails()));
-			detailCB.setValue(detail.values()[pdfC.getDetails().get(i)].name());
-			detailVB.getChildren().add(detailCB);
-			TextField text = new TextField();
-			text.setText(para);
-			text.setEditable(false);
-			textVB.getChildren().add(text);
-			TextField font = new TextField();
-			font.setText(pdfC.getAnalizeFont().get(i));
-			font.setEditable(false);
-			fontVB.getChildren().add(font);
-			TextField pos = new TextField();
-			pos.setText(pdfC.getAnalizeX().get(i));
-			pos.setEditable(false);
-			xVB.getChildren().add(pos);
+			detailVB.getChildren().add(setUpChoicebox(i));
+			textVB.getChildren().add(setUpTextField(para));
+			fontVB.getChildren().add(setUpTextField(pdfC.getAnalizeFont().get(i)));
+			xVB.getChildren().add(setUpTextField(pdfC.getAnalizeX().get(i)));
 			i++;
 		}
 		
-		
-		for(int y:Main.getSession().getyIgnore()){
+		for(Vector y:Main.getSession().getPosDate()){
 			CheckBox chb = new CheckBox();
-			TextField ftf = new TextField();
-			ftf.setText(""+y);;
-			ftf.setEditable(false);
 			HBox yHB = new HBox();
 			yHB.getChildren().add(chb);
-			yHB.getChildren().add(ftf);
+			yHB.getChildren().add(setUpTextField(y.get(0)+" "+y.get(1)));
 			ignoredVB.getChildren().add(yHB);
 		}
 	}
@@ -78,36 +69,51 @@ public class OptionsWindowController {
 	
 	@FXML
 	private void onPressOK(){
-		ArrayList<Integer> yIgnore = Main.getSession().getyIgnore();
-		
-		
-		for (int i=1;i<yIgnore.size()+1;i++){
+		for (int i=1;i<posDate.size()+1;i++){
 			HBox hbox = (HBox) ignoredVB.getChildren().get(i);
 			CheckBox chb = (CheckBox) hbox.getChildren().get(0);
 			if(chb.isSelected())
-				yIgnore.remove(i-1);
-			
+				posDate.remove(i-1);
 		}
 		
 		for ( int i=0;i<detailVB.getChildren().size();i++ ){
 			ChoiceBox<String> cb = (ChoiceBox<String>) detailVB.getChildren().get(i);
-			if(cb.getValue().equals("yIgnore")){
-				TextField tf = (TextField) xVB.getChildren().get(i);
-				String y = tf.getText().split(" ")[1];
-				yIgnore.add(Integer.parseInt(y));
-			}
-		}		
-		Main.getSession().setyIgnore(yIgnore);
+			processChoice(cb, i);
+		}
+		
+		Main.getSession().setPosDate(posDate);
 		Main.getSession().closeWindow(window.OptionsWindow);
 	}
 	
-	private ArrayList<String> getDetails(){
+	private ObservableList<String> setUpDetails(){
 		ArrayList<String> details = new ArrayList<String>();
 		for(detail d:detail.values()){
 			details.add(d.name());
 		}
-		details.add("yIgnore");
-		return details;
+		details.add("Datum");
+		return  FXCollections.observableArrayList(details);
+	}
+	
+	private ChoiceBox<String> setUpChoicebox(int i){
+		ChoiceBox<String> detailCB = new ChoiceBox<String>(setUpDetails());
+		detailCB.setValue(detail.values()[pdfC.getDetails().get(i)].name());
+		return detailCB;
+	}
+	
+	private TextField setUpTextField(String content){
+		TextField textField = new TextField();
+		textField.setText(content);
+		textField.setEditable(false);		
+		return textField;
 	}
 
+	private void processChoice (ChoiceBox<String> cb, int i){
+		switch(cb.getValue()){
+		case "Datum":
+			TextField tf = (TextField) xVB.getChildren().get(i);
+			String pos[] = tf.getText().split(" ");
+			Vector date = new Vector(Integer.parseInt(pos[0]), Integer.parseInt(pos[1]), 0);
+			posDate.add(date);
+		}
+	}
 }

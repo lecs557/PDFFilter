@@ -72,12 +72,12 @@ public class PDFController {
 		int y = (int) startBase.get(1);
 		int x = (int) startBase.get(0);
 		int size = (int) (startAscent.get(1)-startBase.get(1));
-		
 		style style = createSryle(font);
 		
-		
-		if (!word.equals("") &&  !yIgnore(y)  ) { 
-			if (changedStyleOrSize(style, size)){
+		if ( !word.equals("") ) { 
+			if(isDate(startBase)){
+				textOfToday.setDatum(word);
+			} else if (changedStyleOrSize(style, size)){
 				if(xVers==0)
 					xVers=x;
 				startParagraph(word, style, startBase, size);
@@ -122,9 +122,11 @@ public class PDFController {
 		return y != oldY;
 	}
 	
-	private boolean yIgnore(int y){
-		for(int c:session.getyIgnore()){
-			if (y==c)
+	private boolean isDate(Vector start){
+		int startX = (int) start.get(0);
+		int startY = (int) start.get(1);
+		for(Vector c:session.getPosDate()){
+			if (startY==(int) c.get(1) )
 				return true;
 		}
 		return false;

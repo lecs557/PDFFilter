@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class TextOfToday {
 
-	private String datum;
+	private String datum = "";
 	private ArrayList<Paragraph> day;
 	
 	public TextOfToday() {
@@ -20,7 +20,7 @@ public class TextOfToday {
 		return day;
 	}
 	public void setDatum(String datum) {
-		this.datum = datum;
+		this.datum += datum;
 	}
 	public String getDatum(){
 		return datum;
