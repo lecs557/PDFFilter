@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Main;
 import model.Paragraph.detail;
+import model.Session;
 import model.Session.window;
 
 import com.itextpdf.text.pdf.parser.Vector;
@@ -20,8 +21,8 @@ import com.itextpdf.text.pdf.parser.Vector;
 import controller.AnalizeController;
 
 public class OptionsWindowController {
-	
-	AnalizeController pdfC = Main.getSession().getAnalizeController();
+	Session ses = Main.getSession();
+	AnalizeController analizeC = ses.getAnalizeController();
 	ArrayList<Vector> posDate = Main.getSession().getPosDate();
 	
 	@FXML
@@ -44,16 +45,17 @@ public class OptionsWindowController {
 	
 	public void initialize(){
 		int i=0;
-		lb.setText("Seite:"+Main.getSession().getStart() + " Datum " + Main.getSession().getPdfController().getTextOfToday().getDatum());
-		for (String para:pdfC.getAnalizeText()){
+		lb.setText("Seite:"+ses.getStart() + " Datum " + ses.getPdfController().getTextOfToday().getDatum());
+		for (String para:analizeC.getAnalizeText()){
 			detailVB.getChildren().add(setUpChoicebox(i));
 			textVB.getChildren().add(setUpTextField(para));
-			fontVB.getChildren().add(setUpTextField(pdfC.getAnalizeFont().get(i)));
-			xVB.getChildren().add(setUpTextField(pdfC.getAnalizeX().get(i)));
+			fontVB.getChildren().add(setUpTextField(analizeC.getAnalizeFont().get(i)));
+			xVB.getChildren().add(setUpTextField(analizeC.getAnalizeX().get(i)));
 			i++;
 		}
 		
-		for(Vector y:Main.getSession().getPosDate()){
+		
+		for(Vector y:ses.getPosDate()){
 			CheckBox chb = new CheckBox();
 			HBox yHB = new HBox();
 			yHB.getChildren().add(chb);
@@ -64,7 +66,7 @@ public class OptionsWindowController {
 	
 	@FXML
 	private void onPressClose(){
-		Main.getSession().closeWindow(window.OptionsWindow);
+		ses.closeWindow(window.OptionsWindow);
 	}
 	
 	@FXML
@@ -81,8 +83,8 @@ public class OptionsWindowController {
 			processChoice(cb, i);
 		}
 		
-		Main.getSession().setPosDate(posDate);
-		Main.getSession().closeWindow(window.OptionsWindow);
+		ses.setPosDate(posDate);
+		ses.closeWindow(window.OptionsWindow);
 	}
 	
 	private ObservableList<String> setUpDetails(){
@@ -96,7 +98,7 @@ public class OptionsWindowController {
 	
 	private ChoiceBox<String> setUpChoicebox(int i){
 		ChoiceBox<String> detailCB = new ChoiceBox<String>(setUpDetails());
-		detailCB.setValue(detail.values()[pdfC.getDetails().get(i)].name());
+		detailCB.setValue(detail.values()[analizeC.getDetails().get(i)].name());
 		return detailCB;
 	}
 	

@@ -38,14 +38,21 @@ public class AnalizeController {
 //			daysSegments.add(k +" "+ (today.getContent().size()-(today.isHasTitle()?4:3)));
 //			month = today.getMonth();
 //		}
-	
-		for(Paragraph para:today.getContent()){
-			detailList.add(para.getOrdDetail());
-			textList.add(para.getParagraph());
-			fontList.add(para.getFont());
-			positionList.add(para.getPosition());
-		}
+		if(today.isInvalid()){
+			today.setDatum("Invalid");
+			detailList.add(4);
+			textList.add("FEHLER");
+			fontList.add("FEHLER");
+			positionList.add("FEHLER");
+		} else {
+			for(Paragraph para:today.getContent()){
+				detailList.add(para.getOrdDetail());
+				textList.add(para.getParagraph());
+				fontList.add(para.getFont());
+				positionList.add(para.getPosition());
+			}
 			k++;
+		}
 	}
 	
 	public ArrayList<ArrayList<String>> getAmountOfSegments() {

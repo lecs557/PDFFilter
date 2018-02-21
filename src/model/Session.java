@@ -33,6 +33,11 @@ public class Session {
 	private String destination;
 	private PdfReader pdfReader;
 	private ArrayList<Vector> posDate = new ArrayList<Vector>();	
+	private ArrayList<String> invalids = new ArrayList<String>();	
+	public ArrayList<String> getInvalids() {
+		return invalids;
+	}
+
 	public Session() {}
 	
 	public void initialize(Stage stage){

@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 
 import model.Main;
 import model.Paragraph;
-import model.Session;
 import model.TextOfToday;
 
 public class TextFileController {
@@ -34,7 +33,7 @@ public class TextFileController {
 		int length = today.getContent().size();
 		for (int i = 0; i < length; i++) {
 			write(i);
-			if(i==length-1)
+			if(i==length-1 && !today.isInvalid())
 				fw.append("ENDEDESKAPTELS\r\n\r\n");
 		}					
 		if(counter== (Main.getSession().getEnd() - Main.getSession().getStart()) ){
@@ -45,19 +44,38 @@ public class TextFileController {
 	
 	private void write(int i) throws IOException{
 		Paragraph paragraph = today.getContent().get(i);
-		switch (paragraph.getOrdDetail()){
-		case 0:
-			fw.append("[{product_id:2,number:"+counter+",title:"+paragraph.getParagraph()+",text:\r\n");
-			break;
-		case 1:
-			fw.append("<h1>"+paragraph.getParagraph()+"</h1>\r\n");
-			break;
-		case 2:
-			fw.append("<b>"+paragraph.getParagraph()+"</b>");
-			break;
-		case 3:
-			fw.append("<p style=\"margin-left:0cm; margin-right:0cm\">"+paragraph.getParagraph()+"</p>\r\n");
-			break;			
+		
+		if(correctDate(today.getDatum())){
+			switch (paragraph.getOrdDetail()){
+			case 0:
+				fw.append("[{product_id:2,number:"+counter+",title:"+paragraph.getParagraph()+",text:\r\n");
+				break;
+			case 1:
+				fw.append("<h1>"+paragraph.getParagraph()+"</h1>\r\n");
+				break;
+			case 2:
+				fw.append("<b>"+paragraph.getParagraph()+"</b>");
+				break;
+			case 3:
+				fw.append("<p style=\"margin-left:0cm; margin-right:0cm\">"+paragraph.getParagraph()+"</p>\r\n");
+				break;			
+			}			
+		} else{
+			today.setInvalid(true);
+			Main.getSession().getInvalids().add("INVALID SEITE" + Main.getSession().getPdfController().getPage());
 		}
+	}
+	
+	private boolean correctDate(String date){
+		if (Main.getSession().getPosDate().size()!=0){
+			String[] split = date.split(" ");
+			try{
+				Integer.parseInt(split[1]);		
+			}catch (Exception e){
+				return false;
+			}
+			return split.length==3;
+		}
+		return true;
 	}
 }

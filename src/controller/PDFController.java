@@ -33,7 +33,7 @@ public class PDFController {
 	private TextOfToday textOfToday;
 	
 	private int xVers;
-
+	private int page;
 	private style oldStyle = style.Normal;
 	private int oldSize = 0;
 	private int oldY = 500;
@@ -51,12 +51,17 @@ public class PDFController {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
+		this.page=page;
 		xVers=0;
 		oldY = 500;
 		textOfToday = new TextOfToday();
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
+	}
+
+	public int getPage() {
+		return page;
 	}
 
 	/**
@@ -76,6 +81,8 @@ public class PDFController {
 		
 		if ( !word.equals("") ) { 
 			if(isDate(startBase)){
+				if(newLine(y) && !textOfToday.getDatum().equals(""))
+					textOfToday.setDatum(" ");
 				textOfToday.setDatum(word);
 			} else if (changedStyleOrSize(style, size)){
 				if(xVers==0)
@@ -97,6 +104,10 @@ public class PDFController {
 		}
 	}
 	
+	private boolean range (int min, int x, int max){
+		return min <= x && x<= max;
+	}
+	
 
 	private style createSryle (String temp){
 		style style = model.Paragraph.style.Normal;
@@ -110,7 +121,7 @@ public class PDFController {
 	private boolean belongsToCurrentParagraph(Vector start, int size) {
 		int x = (int) start.get(0);
 		int y = (int) start.get(1);
-		boolean btcp = y - oldY == 0 ||  -5 < oldX -x &&  oldX - x < 95 && oldX < 120 && oldY - y < size*2.2f;
+		boolean btcp = y - oldY == 0 || range(-5,oldX -x,90) && oldX < 120 && oldY - y < size*2.2f;
 		return btcp;
 	}
 	
@@ -126,7 +137,7 @@ public class PDFController {
 		int startX = (int) start.get(0);
 		int startY = (int) start.get(1);
 		for(Vector c:session.getPosDate()){
-			if (startY==(int) c.get(1) )
+			if (startY==(int) c.get(1) && range(-50,(int)c.get(0)-startX,20) )
 				return true;
 		}
 		return false;

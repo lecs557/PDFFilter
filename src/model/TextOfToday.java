@@ -11,7 +11,16 @@ public class TextOfToday {
 
 	private String datum = "";
 	private ArrayList<Paragraph> day;
+	private boolean invalid;
 	
+	public boolean isInvalid() {
+		return invalid;
+	}
+
+	public void setInvalid(boolean invalid) {
+		this.invalid = invalid;
+	}
+
 	public TextOfToday() {
 		day = new ArrayList<Paragraph>();
 	}
