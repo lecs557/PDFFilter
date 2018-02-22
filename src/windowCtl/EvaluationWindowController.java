@@ -30,7 +30,7 @@ public class EvaluationWindowController {
 		tfc = Main.getSession().getTextFileController();
 		analize = Main.getSession().getAnalizeController();
 		
-		sum.setText("Gesamt: ");
+		sum.setText("Gesamt: "+ (sess.getPdfReader().getNumberOfPages()-sess.getInvalids().size()) );
 		
 		for(ArrayList<String> aos : analize.getAmountOfSegments()){
 			createTA();

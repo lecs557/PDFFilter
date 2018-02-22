@@ -33,7 +33,6 @@ public class PDFController {
 	private TextOfToday textOfToday;
 	
 	private int xVers;
-	private int page;
 	private style oldStyle = style.Normal;
 	private int oldSize = 0;
 	private int oldY = 500;
@@ -51,17 +50,13 @@ public class PDFController {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
-		this.page=page;
+		
 		xVers=0;
 		oldY = 500;
-		textOfToday = new TextOfToday();
+		textOfToday = new TextOfToday(page);
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
-	}
-
-	public int getPage() {
-		return page;
 	}
 
 	/**

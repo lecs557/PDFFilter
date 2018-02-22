@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 public class TextOfToday {
 
+	private int page;
 	private String datum = "";
 	private ArrayList<Paragraph> day;
 	private boolean invalid;
@@ -21,10 +22,15 @@ public class TextOfToday {
 		this.invalid = invalid;
 	}
 
-	public TextOfToday() {
+	public TextOfToday(int page) {
 		day = new ArrayList<Paragraph>();
+		this.page=page;
 	}
 	
+	public int getPage() {
+		return page;
+	}
+
 	public ArrayList<Paragraph> getContent(){
 		return day;
 	}

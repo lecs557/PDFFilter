@@ -62,7 +62,7 @@ public class TextFileController {
 			}			
 		} else{
 			today.setInvalid(true);
-			Main.getSession().getInvalids().add("INVALID SEITE" + Main.getSession().getPdfController().getPage());
+			Main.getSession().getInvalids().add("INVALID SEITE" + today.getPage());
 		}
 	}
 	

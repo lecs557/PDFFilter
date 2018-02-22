@@ -96,7 +96,6 @@ public class MainWindowController {
 	@FXML
 	private void onPressPre(){
 		int rn = new Random().nextInt(reader.getNumberOfPages()-2) + 1;
-		rn=1;
 		filter(rn,rn+1);
 		analizeBtn.setDisable(false);
 	}

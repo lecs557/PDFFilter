@@ -83,7 +83,6 @@ public class OptionsWindowController {
 			processChoice(cb, i);
 		}
 		
-		ses.setPosDate(posDate);
 		ses.closeWindow(window.OptionsWindow);
 	}
 	

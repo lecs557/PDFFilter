@@ -23,22 +23,18 @@ import controller.TextFileController;
  */
 public class Session {
 
-	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
 	private Stage[] stages = new Stage[4];
+	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
 	private AnalizeController analizeController;
 	private PDFController pdfController;
 	private TextFileController textFileController;
-	private int start;
-	private int end;
-	private String destination;
 	private PdfReader pdfReader;
 	private ArrayList<Vector> posDate = new ArrayList<Vector>();	
 	private ArrayList<String> invalids = new ArrayList<String>();	
-	public ArrayList<String> getInvalids() {
-		return invalids;
-	}
-
-	public Session() {}
+	private String destination;
+	private int start;
+	private int end;
+	private boolean hasDate;
 	
 	public void initialize(Stage stage){
 		this.stages[0] = stage;
@@ -61,80 +57,72 @@ public class Session {
 			stages[window.ordinal()].show();
 	}
 	
-	public void closeWindow(window window) {
-		stages[window.ordinal()].hide();
-	}
-	
 	public void refreshStages() {
 		this.stages[1] = null;
 		this.stages[2] = null;
 		this.stages[3] = null;
 	}
 	
-	public int getStart() {
-		return start;
-	}
-
-	public void setStart(int start) {
-		this.start = start;
-	}
-
-	public TextFileController getTextFileController() {
-		return textFileController;
+	public void closeWindow(window window) {
+		stages[window.ordinal()].hide();
 	}
 	
+	// GETTERS & SETTERS
 	public Stage getStage(window window){
 		return stages[window.ordinal()];
 	}
-
-	public PDFController getPdfController() {
-		return pdfController;
-	}
-
-	public void setPdfController(PDFController pdfController) {
-		this.pdfController = pdfController;
-	}
-
-	public PdfReader getPdfReader() {
-		return pdfReader;
-	}
-
-	public void setPdfReader(PdfReader pdfReader) {
-		this.pdfReader = pdfReader;
-	}
-
-	public void setAnalizeController(AnalizeController analizeController) {
-		this.analizeController = analizeController;
-	}
-
-	public void setTextFileController(TextFileController textFileController) {
-		this.textFileController = textFileController;
-	}
-
 	public AnalizeController getAnalizeController() {
 		return analizeController;
 	}
-
-	public String getDestination() {
-		return destination;
+	public void setAnalizeController(AnalizeController analizeController) {
+		this.analizeController = analizeController;
 	}
-
-	public void setDestination(String destination) {
-		this.destination = destination;
+	public PDFController getPdfController() {
+		return pdfController;
 	}
-
+	public void setPdfController(PDFController pdfController) {
+		this.pdfController = pdfController;
+	}
+	public TextFileController getTextFileController() {
+		return textFileController;
+	}
+	public void setTextFileController(TextFileController textFileController) {
+		this.textFileController = textFileController;
+	}
+	public PdfReader getPdfReader() {
+		return pdfReader;
+	}
+	public void setPdfReader(PdfReader pdfReader) {
+		this.pdfReader = pdfReader;
+	}
 	public ArrayList<Vector> getPosDate() {
 		return posDate;
 	}
-
-	public void setPosDate(ArrayList<Vector> posDate) {
-		this.posDate = posDate;
+	public ArrayList<String> getInvalids() {
+		return invalids;
 	}
+	public String getDestination() {
+		return destination;
+	}
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}	
+	public int getStart() {
+		return start;
+	}
+	public void setStart(int start) {
+		this.start = start;
+	}	
 	public int getEnd() {
 		return end;
 	}
-
 	public void setEnd(int end) {
 		this.end = end;
+	}
+	public boolean isHasDate() {
+		return hasDate;
+	}
+	public void setHasDate(boolean hasDate) {
+		this.hasDate = hasDate;
 	}
 }

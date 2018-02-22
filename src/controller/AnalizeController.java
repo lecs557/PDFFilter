@@ -28,19 +28,27 @@ public class AnalizeController {
 	
 	public void analize(){
 		today = Main.getSession().getPdfController().getTextOfToday();
-
-//		if ( month.equals(today.getMonth()) ){
-//			daysSegments.add(k +" "+ (today.getContent().size()-(today.isHasTitle()?4:3)));	
-//			
-//		} else{
-//			daysSegments = new ArrayList<String>();
-//			monthList.add(daysSegments);
-//			daysSegments.add(k +" "+ (today.getContent().size()-(today.isHasTitle()?4:3)));
-//			month = today.getMonth();
-//		}
+		if ( session.isHasDate() && !today.isInvalid()){
+			buildUpMonthList(today);
+		}
+		buildUpOptionLists(today);
+	}
+	
+	private void buildUpMonthList (TextOfToday today){
+		if ( month.equals(today.getMonth()) ){
+			daysSegments.add(monthListContent(today));			
+		} else{
+			month = today.getMonth();
+			daysSegments = new ArrayList<String>();
+			monthList.add(daysSegments);
+			daysSegments.add(month+"\n"+monthListContent(today));
+		}
+	}
+	
+	private void buildUpOptionLists(TextOfToday today){
 		if(today.isInvalid()){
 			today.setDatum("Invalid");
-			detailList.add(4);
+			detailList.add(3);
 			textList.add("FEHLER");
 			fontList.add("FEHLER");
 			positionList.add("FEHLER");
@@ -51,10 +59,20 @@ public class AnalizeController {
 				fontList.add(para.getFont());
 				positionList.add(para.getPosition());
 			}
-			k++;
 		}
 	}
 	
+	private String monthListContent(TextOfToday today){
+		int para=0;
+		for (Paragraph p: today.getContent()){
+			if(p.getOrdDetail()==3)
+				para++;
+		}
+		return today.getPage()+" "+para;
+	}
+	
+	
+	// GETTERS & SETTERS
 	public ArrayList<ArrayList<String>> getAmountOfSegments() {
 		return monthList;
 	}
