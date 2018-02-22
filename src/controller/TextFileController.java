@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -9,60 +10,51 @@ import java.nio.charset.StandardCharsets;
 
 import model.Main;
 import model.Paragraph;
+import model.Session;
 import model.TextOfToday;
 
 public class TextFileController {
-	private TextOfToday today;
-	private int counter = 0;
-	private FileOutputStream bw;
-	private Writer fw; 
 	
-	/**
-	 * writes the daily-objects in different files and
-	 * their segments are divided with two paragraphs
-	 * @throws IOException
-	 */
+	private Session session = Main.getSession();
+	private TextOfToday today;
+	private FileOutputStream fos;
+	private Writer bw; 
+	private int counter = 0;
+	
+	
+	//PUBLIC
 	public void writeDailytxt() throws IOException {
-		today = Main.getSession().getPdfController().getTextOfToday();
+		today = session.getPdfController().getTextOfToday();
+		if(fos==null)
+			createFOSBW();
 		
-		if(fw==null){
-			bw = new FileOutputStream(Main.getSession().getDestination()+"\\productTitle.txt");
-			fw = new BufferedWriter(new OutputStreamWriter(bw,				
-					StandardCharsets.UTF_8));
-		}
 		int length = today.getContent().size();
-		for (int i = 0; i < length; i++) {
-			write(i);
-			if(i==length-1 && !today.isInvalid())
-				fw.append("ENDEDESKAPTELS\r\n\r\n");
-		}					
-		if(counter== (Main.getSession().getEnd() - Main.getSession().getStart()) ){
-			fw.close();
-		}
+		for (int i = 0; i < length; i++) 
+			write(i, length);				
+		
+		if(counter == (session.getEnd() - session.getStart()) )
+			bw.close();
+		
 		counter++;
 	}
 	
-	private void write(int i) throws IOException{
+	//PRIVATE
+	private void createFOSBW() throws FileNotFoundException{
+		fos = new FileOutputStream(session.getDestination()
+				+"\\productTitle.txt");
+		bw = new BufferedWriter(new OutputStreamWriter(fos,				
+				StandardCharsets.UTF_8));
+	}
+	
+	private void write(int i, int length) throws IOException{
 		Paragraph paragraph = today.getContent().get(i);
-		
 		if(correctDate(today.getDatum())){
-			switch (paragraph.getOrdDetail()){
-			case 0:
-				fw.append("[{product_id:2,number:"+counter+",title:"+paragraph.getParagraph()+",text:\r\n");
-				break;
-			case 1:
-				fw.append("<h1>"+paragraph.getParagraph()+"</h1>\r\n");
-				break;
-			case 2:
-				fw.append("<b>"+paragraph.getParagraph()+"</b>");
-				break;
-			case 3:
-				fw.append("<p style=\"margin-left:0cm; margin-right:0cm\">"+paragraph.getParagraph()+"</p>\r\n");
-				break;			
-			}			
+			chooseText(paragraph);
+			if(i==length-1)
+				bw.append("ENDEDESKAPTELS\r\n\r\n");
 		} else{
 			today.setInvalid(true);
-			Main.getSession().getInvalids().add("INVALID SEITE" + today.getPage());
+			session.getInvalids().add("INVALID SEITE" + today.getPage());
 		}
 	}
 	
@@ -77,5 +69,24 @@ public class TextFileController {
 			return split.length==3;
 		}
 		return true;
+	}
+	
+	private void chooseText (Paragraph paragraph) throws IOException{
+		switch (paragraph.getOrdDetail()){
+		case 0:
+			bw.append("[{product_id:2,number:"+counter+","
+					+ "title:"+paragraph.getParagraph()+",text:\r\n");
+			break;
+		case 1:
+			bw.append("<h1>"+paragraph.getParagraph()+"</h1>\r\n");
+			break;
+		case 2:
+			bw.append("<b>"+paragraph.getParagraph()+"</b>");
+			break;
+		case 3:
+			bw.append("<p style=\"margin-left:0cm; margin-right:0cm\">"
+					+paragraph.getParagraph()+"</p>\r\n");
+			break;			
+		}
 	}
 }

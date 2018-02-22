@@ -14,34 +14,32 @@ public class TextOfToday {
 	private ArrayList<Paragraph> day;
 	private boolean invalid;
 	
-	public boolean isInvalid() {
-		return invalid;
-	}
-
-	public void setInvalid(boolean invalid) {
-		this.invalid = invalid;
-	}
-
+	
 	public TextOfToday(int page) {
 		day = new ArrayList<Paragraph>();
 		this.page=page;
 	}
 	
+	// GETTERS & SETTERS
 	public int getPage() {
 		return page;
-	}
-
-	public ArrayList<Paragraph> getContent(){
-		return day;
-	}
-	public void setDatum(String datum) {
-		this.datum += datum;
 	}
 	public String getDatum(){
 		return datum;
 	}
+	public void setDatum(String datum) {
+		this.datum += datum;
+	}
+	public ArrayList<Paragraph> getContent(){
+		return day;
+	}
+	public boolean isInvalid() {
+		return invalid;
+	}
+	public void setInvalid(boolean invalid) {
+		this.invalid = invalid;
+	}
 	public String getMonth(){
 		return datum.split(" ")[0];
 	}
-
 }

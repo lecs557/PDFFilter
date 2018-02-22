@@ -28,24 +28,17 @@ import com.itextpdf.text.pdf.parser.Vector;
  */
 public class PDFController {	
 	private Session session = Main.getSession();
-	private PdfReader reader = session.getPdfReader();
-	
+	private PdfReader reader = session.getPdfReader();	
 	private TextOfToday textOfToday;
-	
+	private Paragraph currentParagraph;
 	private int xVers;
 	private style oldStyle = style.Normal;
 	private int oldSize = 0;
 	private int oldY = 500;
 	private int oldX = 0;
 	
-	private Paragraph currentParagraph;
 	
-	/**
-	 * Scans every word of the PDF-File, invokes <<FontFilter>> to get 
-	 * the render info which are given to <createText>
-	 * Can be invoked only for one page a time 
-	 * @param path @param page of the PDF-File
-	 */
+	//PUBLIC
 	public void readPDF(int page) throws IOException {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
@@ -59,11 +52,6 @@ public class PDFController {
 				strategy);
 	}
 
-	/**
-	 * Tries to find out the different segments
-	 * and puts the into the daily-Object. 
-	 * @param rinfo
-	 */
 	public void createText(TextRenderInfo rinfo) {
 		String word = rinfo.getText().replace("- ", "");
 		String font = rinfo.getFont().getPostscriptFontName();
@@ -99,11 +87,7 @@ public class PDFController {
 		}
 	}
 	
-	private boolean range (int min, int x, int max){
-		return min <= x && x<= max;
-	}
-	
-
+	//PRIVATE
 	private style createSryle (String temp){
 		style style = model.Paragraph.style.Normal;
 		for(style f:style.values()){
@@ -112,22 +96,8 @@ public class PDFController {
 		}	
 		return style;
 	}
-
-	private boolean belongsToCurrentParagraph(Vector start, int size) {
-		int x = (int) start.get(0);
-		int y = (int) start.get(1);
-		boolean btcp = y - oldY == 0 || range(-5,oldX -x,90) && oldX < 120 && oldY - y < size*2.2f;
-		return btcp;
-	}
 	
-	private boolean changedStyleOrSize(style style, int size){
-		return style != oldStyle || size != oldSize;
-	}
-
-	private boolean newLine(int y){
-		return y != oldY;
-	}
-	
+	 
 	private boolean isDate(Vector start){
 		int startX = (int) start.get(0);
 		int startY = (int) start.get(1);
@@ -137,7 +107,15 @@ public class PDFController {
 		}
 		return false;
 	}
-
+	
+	private boolean newLine(int y){
+		return y != oldY;
+	}
+	
+	private boolean changedStyleOrSize(style style, int size){
+		return style != oldStyle || size != oldSize;
+	}
+	
 	private void startParagraph(String word, style style, Vector start, int size){
 		currentParagraph = new Paragraph(word, style, start, size);
 		textOfToday.getContent().add(currentParagraph);
@@ -159,9 +137,21 @@ public class PDFController {
 			else
 				currentParagraph.setDetail(detail.Paragraph);
 			break;
-		}
-		
+		}	
 	}
+	
+	private boolean belongsToCurrentParagraph(Vector start, int size) {
+		int x = (int) start.get(0);
+		int y = (int) start.get(1);
+		boolean btcp = y - oldY == 0 || range(-5,oldX -x,90) && oldX < 120 && oldY - y < size*2.2f;
+		return btcp;
+	}
+	
+	private boolean range (int min, int x, int max){
+		return min <= x && x<= max;
+	}
+	
+	//GETTER & SETTER
 	public TextOfToday getTextOfToday() {
 		return textOfToday;
 	}
