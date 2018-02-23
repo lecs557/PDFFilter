@@ -9,43 +9,39 @@ import model.Session;
 
 public class AnalizeController {
 	private Session session = Main.getSession();
-	private TextFileController tfc = session.getTextFileController();
+	private PDFController pdfC = session.getPdfController();
 	private TextOfToday today;
-	
 	private ArrayList<String> daysSegments;
 	private ArrayList<ArrayList<String>> monthList = new ArrayList<ArrayList<String>>();
-	
 	private ArrayList<String> textList = new ArrayList<String>();
 	private ArrayList<String> positionList = new ArrayList<String>();
 	private ArrayList<String> fontList = new ArrayList<String>();
 	private ArrayList<Integer> detailList = new ArrayList<Integer>();
-	
 	private String month="";
-	private int k = session.getStart();
-	private boolean analyzeOnly=true;
 	
 	
-	
+	// PUBLIC
 	public void analize(){
-		today = Main.getSession().getPdfController().getTextOfToday();
+		today = pdfC.getTextOfToday();
 		if ( session.isHasDate() && !today.isInvalid()){
-			buildUpMonthList(today);
+			buildUpMonthList();
 		}
-		buildUpOptionLists(today);
+		buildUpOptionLists();
 	}
 	
-	private void buildUpMonthList (TextOfToday today){
+	// PRIVATE
+	private void buildUpMonthList (){
 		if ( month.equals(today.getMonth()) ){
-			daysSegments.add(monthListContent(today));			
+			daysSegments.add(monthListContent());			
 		} else{
 			month = today.getMonth();
 			daysSegments = new ArrayList<String>();
 			monthList.add(daysSegments);
-			daysSegments.add(month+"\n"+monthListContent(today));
+			daysSegments.add(month+"\n"+monthListContent());
 		}
 	}
 	
-	private void buildUpOptionLists(TextOfToday today){
+	private void buildUpOptionLists(){
 		if(today.isInvalid()){
 			today.setDatum("Invalid");
 			detailList.add(3);
@@ -62,7 +58,7 @@ public class AnalizeController {
 		}
 	}
 	
-	private String monthListContent(TextOfToday today){
+	private String monthListContent(){
 		int para=0;
 		for (Paragraph p: today.getContent()){
 			if(p.getOrdDetail()==3)

@@ -36,6 +36,7 @@ public class MainWindowController {
 	private ProgressBar bar;
 	
 	
+	// FXML
 	@FXML
 	private void onPressBrowse() throws IOException {
 		File file = setupFileChooser().showOpenDialog(session
@@ -83,6 +84,7 @@ public class MainWindowController {
 		System.exit(0);
 	}		
 	
+	// PRIVATE
 	private FileChooser setupFileChooser(){
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
@@ -110,9 +112,9 @@ public class MainWindowController {
 		session.setDestination(tf_pathDes.getText());
 		session.setPdfReader(reader);
 		session.refreshStages();
+		session.setPdfController(new PDFController());	
 		session.setTextFileController(new TextFileController());
 		session.setAnalizeController(new AnalizeController());
-		session.setPdfController(new PDFController());	
 	}
 	
 	private void startFiltering(){

@@ -14,38 +14,36 @@ import controller.TextFileController;
 	
 
 public class EvaluationWindowController {
-	
-	private Session sess;
-	private TextFileController tfc;
-	private AnalizeController analize;
+	private Session sess = Main.getSession();;
+	private AnalizeController analize = sess.getAnalizeController();
 	@FXML
 	private TextField sum;
 	@FXML 
 	private HBox hb;
 	@FXML 
-	private TextArea crntTA	;
+	private TextArea crntTA, invalids;
+	
 	
 	public void initialize(){
-		sess = Main.getSession();
-		tfc = Main.getSession().getTextFileController();
-		analize = Main.getSession().getAnalizeController();
-		
 		sum.setText("Gesamt: "+ (sess.getPdfReader().getNumberOfPages()-sess.getInvalids().size()) );
-		
 		for(ArrayList<String> aos : analize.getAmountOfSegments()){
 			createTA();
 			for(String aoms: aos){
 				editTA(aoms+"\n");			
 			}
-		}		
+		}
+		for (String inv: sess.getInvalids()){
+			invalids.setText(invalids.getText()+inv+"\n");
+		}
 	}
 	
-	
+	// FXML
 	@FXML
 	private void onPressClose(){
 		sess.closeWindow(window.EvaluationWindow);
 	}
 	
+	// PRIVATE
 	private void createTA(){
 		crntTA = new TextArea();
 		crntTA.setEditable(false);

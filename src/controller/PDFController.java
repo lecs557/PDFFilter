@@ -36,6 +36,7 @@ public class PDFController {
 	private int oldSize = 0;
 	private int oldY = 500;
 	private int oldX = 0;
+	private boolean isDate;
 	
 	
 	//PUBLIC
@@ -44,6 +45,7 @@ public class PDFController {
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
 		
+		isDate=false;
 		xVers=0;
 		oldY = 500;
 		textOfToday = new TextOfToday(page);
@@ -63,7 +65,7 @@ public class PDFController {
 		style style = createSryle(font);
 		
 		if ( !word.equals("") ) { 
-			if(isDate(startBase)){
+			if(session.isHasDate() && (isDate || isYBigger(y))){
 				if(newLine(y) && !textOfToday.getDatum().equals(""))
 					textOfToday.setDatum(" ");
 				textOfToday.setDatum(word);
@@ -98,14 +100,11 @@ public class PDFController {
 	}
 	
 	 
-	private boolean isDate(Vector start){
-		int startX = (int) start.get(0);
-		int startY = (int) start.get(1);
-		for(Vector c:session.getPosDate()){
-			if (startY==(int) c.get(1) && range(-50,(int)c.get(0)-startX,20) )
-				return true;
-		}
-		return false;
+	private boolean isYBigger(int y){
+		boolean is = oldY < y;
+		if(is)
+			isDate = true;
+		return is;
 	}
 	
 	private boolean newLine(int y){

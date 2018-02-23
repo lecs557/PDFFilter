@@ -22,7 +22,6 @@ import controller.TextFileController;
  * @author Marcel
  */
 public class Session {
-
 	private Stage[] stages = new Stage[4];
 	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
 	private AnalizeController analizeController;
@@ -36,6 +35,8 @@ public class Session {
 	private int end;
 	private boolean hasDate;
 	
+	
+	// PUBLIC
 	public void initialize(Stage stage){
 		this.stages[0] = stage;
 	}

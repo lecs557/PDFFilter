@@ -11,14 +11,8 @@
 			<VBox fx:id="textVB" prefWidth="250" />
 			<VBox fx:id="fontVB" prefWidth="250.0" />
 			<VBox fx:id="xVB" prefWidth="120" />
-			<VBox fx:id="fontsVB">
-				<Label text="Font ignorieren" />
-			</VBox>
-			<VBox fx:id="ignoredVB">
+			<VBox fx:id="datePosVB">
 				<Label text="Y wieder akzeptieren" />
-			</VBox>
-			<VBox fx:id="ignoredFontVB">
-				<Label text="Font wieder akzeptieren" />
 			</VBox>
 		</HBox>
 		<HBox alignment="BOTTOM_RIGHT">

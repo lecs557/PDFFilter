@@ -13,15 +13,15 @@ import javafx.stage.Stage;
  * @author Marcel
  */
 public class Main extends Application {
-
 	private static Session ses;
 
+	
+	// PUBLIC
 	@Override 
 	public void start(Stage stage) throws IOException {
 		ses = new Session();
 		ses.initialize(stage);
 		Parent root = FXMLLoader.load(getClass().getResource("/gui/MainWindow.xml"));
-//		Parent root = FXMLLoader.load(getClass().getResource("/gui/EvaluationWindow.xml")); 
 		Scene scene = new Scene(root);
 		stage.setTitle("PDF Filter");
 		stage.setScene(scene);        
@@ -32,6 +32,7 @@ public class Main extends Application {
 		launch(parameters);   
 	}
 
+	// GETTERS & SETTERS
 	public static Session getSession() {
 		return ses;
 	}

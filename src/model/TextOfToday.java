@@ -8,7 +8,6 @@ import java.util.ArrayList;
  * @author Marcel
  */
 public class TextOfToday {
-
 	private int page;
 	private String datum = "";
 	private ArrayList<Paragraph> day;

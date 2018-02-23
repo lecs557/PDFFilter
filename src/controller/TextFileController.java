@@ -14,7 +14,6 @@ import model.Session;
 import model.TextOfToday;
 
 public class TextFileController {
-	
 	private Session session = Main.getSession();
 	private TextOfToday today;
 	private FileOutputStream fos;
@@ -29,9 +28,17 @@ public class TextFileController {
 			createFOSBW();
 		
 		int length = today.getContent().size();
-		for (int i = 0; i < length; i++) 
-			write(i, length);				
+		if(correctDate(today.getDatum())){
+			today.setInvalid(false);
+			for (int i = 0; i < length; i++) 
+				write(i, length);				
+		}else {
+			today.setInvalid(true);
+			session.getInvalids().add("INVALID SEITE" + today.getPage());
+			System.out.println("INVALID "+today.getDatum());
+		}
 		
+		System.out.println("VALID "+today.getDatum());
 		if(counter == (session.getEnd() - session.getStart()) )
 			bw.close();
 		
@@ -48,18 +55,15 @@ public class TextFileController {
 	
 	private void write(int i, int length) throws IOException{
 		Paragraph paragraph = today.getContent().get(i);
-		if(correctDate(today.getDatum())){
-			chooseText(paragraph);
-			if(i==length-1)
-				bw.append("ENDEDESKAPTELS\r\n\r\n");
-		} else{
-			today.setInvalid(true);
-			session.getInvalids().add("INVALID SEITE" + today.getPage());
-		}
+		chooseText(paragraph);
+		if(i==length-1)
+			bw.append("ENDEDESKAPTELS\r\n\r\n");
+	
 	}
 	
 	private boolean correctDate(String date){
-		if (Main.getSession().getPosDate().size()!=0){
+		if (session.getPosDate().size()!=0){
+			session.setHasDate(true);
 			String[] split = date.split(" ");
 			try{
 				Integer.parseInt(split[1]);		

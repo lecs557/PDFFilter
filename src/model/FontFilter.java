@@ -6,17 +6,11 @@ import com.itextpdf.text.pdf.parser.TextRenderInfo;
 public class FontFilter extends RenderFilter {
 		
 	
-	public FontFilter(){
-		
-	}
+	public FontFilter(){ }
 	
 	@Override
 	public boolean allowText(TextRenderInfo tri) {
-		
 		Main.getSession().getPdfController().createText(tri);
-		
 		return true;
-		
-		
 	}
 }

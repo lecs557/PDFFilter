@@ -6,6 +6,7 @@
  <children>
 	 	<TextField fx:id="sum"  MaxWidth="300" editable="false"></TextField>
 		<HBox fx:id="hb" prefHeight="300.0" prefWidth="600" alignment="top_center"/>
+		<TextArea fx:id="invalids" />
 		<HBox alignment="BOTTOM_RIGHT">
 			<Button onAction="#onPressClose" text="Close" textAlignment="CENTER"  />
 		</HBox>

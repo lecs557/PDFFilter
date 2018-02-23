@@ -15,7 +15,6 @@ public class AnalizeWindowController {
 	private TextArea analizeX;
 	
 	public void initialize(){
-		
 		for (String text:analize.getAnalizeText()){
 			analizeFont.setText(analizeFont.getText()+text);
 		}
@@ -26,6 +25,7 @@ public class AnalizeWindowController {
 		analizeX.setEditable(false);
 	}
 	
+	// FXML
 	@FXML
 	private void onPressClose(){
 		Main.getSession().closeWindow(window.AnalizeWindow);
