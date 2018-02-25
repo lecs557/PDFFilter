@@ -31,7 +31,7 @@ public class MainWindowController {
 	@FXML
 	private TextField tf_absolutePath, tf_pathDes ;
 	@FXML
-	private Button okBtn, analizeBtn, browseDesBtn, preBtn;
+	private Button okBtn, analizeBtn, browseDesBtn, preBtn, evaluationBtn;
 	@FXML
 	private ProgressBar bar;
 	
@@ -65,18 +65,27 @@ public class MainWindowController {
 	@FXML
 	private void onPressPre(){
 		int rn = new Random().nextInt(reader.getNumberOfPages()-2) + 1;
+		rn=267;
 		filter(rn,rn+1);
 		analizeBtn.setDisable(false);
 	}
 	
 	@FXML
 	private void onPressAnalize() throws IOException{
-		session.openWindow(window.OptionsWindow);		
+		session.openWindow(window.OptionsWindow);	
+		session.openWindow(window.AnalizeWindow);
+		session.openWindow(window.EvaluationWindow);
 	}
 	
 	@FXML
 	private void onPressOk(){
 		filter(1,reader.getNumberOfPages());
+		okBtn.setDisable(true);
+	}
+
+	@FXML
+	private void onPressEvaluate() throws IOException{
+		session.openWindow(window.EvaluationWindow);
 	}
 	
 	@FXML
@@ -94,7 +103,7 @@ public class MainWindowController {
 	
 	private void setupForFile(boolean file){
 		preBtn.setDisable(!file);
-		okBtn.setDefaultButton(!file);
+		okBtn.setDisable(!file);
 		browseDesBtn.setDisable(!file);
 		tf_pathDes.setText(!file ? "" : "C:\\");
 		bar.setProgress(0);
@@ -130,7 +139,7 @@ public class MainWindowController {
 						session.getAnalizeController().analize();
 					}	
 					analizeBtn.setDisable(false);
-					okBtn.setDisable(false);
+					evaluationBtn.setDisable(false);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

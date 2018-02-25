@@ -12,10 +12,11 @@ public class Paragraph {
 	
 
 	// PUBLIC
-	public Paragraph(String para, style style, Vector pos, int size) {
+	public Paragraph(String para, style style, Vector pos, int size, detail detail) {
 		this.paragraph = para;
-		this.font = style.name()+" "+size;
+		this.font = style.name()+" Größe:"+size;
 		this.position = (int)pos.get(0)+" "+(int)pos.get(1);
+		this.ordDetail = detail.ordinal();
 	}
 	
 	public void add (String word){
@@ -24,6 +25,9 @@ public class Paragraph {
 	
 	// GETTERS & SETTERS
 	public String getParagraph() {
+		while(paragraph.contains("  "))
+			paragraph = paragraph.replace("  ", " ");
+		
 		return paragraph;
 	}
 	public String getFont() {
@@ -34,8 +38,5 @@ public class Paragraph {
 	}
 	public int getOrdDetail() {
 		return ordDetail;
-	}
-	public void setDetail(detail detail){
-		ordDetail = detail.ordinal();
 	}
 }

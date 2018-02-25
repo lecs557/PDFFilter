@@ -59,12 +59,7 @@ public class AnalizeController {
 	}
 	
 	private String monthListContent(){
-		int para=0;
-		for (Paragraph p: today.getContent()){
-			if(p.getOrdDetail()==3)
-				para++;
-		}
-		return today.getPage()+" "+para;
+		return today.getPage()+" "+today.getAmountOfParagraphs();
 	}
 	
 	

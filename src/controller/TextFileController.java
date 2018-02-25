@@ -19,6 +19,8 @@ public class TextFileController {
 	private FileOutputStream fos;
 	private Writer bw; 
 	private int counter = 0;
+	private boolean text;
+	private int j;
 	
 	
 	//PUBLIC
@@ -27,6 +29,8 @@ public class TextFileController {
 		if(fos==null)
 			createFOSBW();
 		
+		j=0;
+		text=false;
 		int length = today.getContent().size();
 		if(correctDate(today.getDatum())){
 			today.setInvalid(false);
@@ -34,30 +38,33 @@ public class TextFileController {
 				write(i, length);				
 		}else {
 			today.setInvalid(true);
-			session.getInvalids().add("INVALID SEITE" + today.getPage());
-			System.out.println("INVALID "+today.getDatum());
+			session.getInvalids().add("INVALID SEITE" + today.getPage() + "  " + today.getDatum());
 		}
 		
-		System.out.println("VALID "+today.getDatum());
-		if(counter == (session.getEnd() - session.getStart()) )
+		if(counter == (session.getEnd() - session.getStart()) ){
+			bw.append("]}");
 			bw.close();
-		
+		}
 		counter++;
 	}
 	
 	//PRIVATE
-	private void createFOSBW() throws FileNotFoundException{
+	private void createFOSBW() throws IOException{
 		fos = new FileOutputStream(session.getDestination()
 				+"\\productTitle.txt");
 		bw = new BufferedWriter(new OutputStreamWriter(fos,				
 				StandardCharsets.UTF_8));
+		bw.append("{\"sheets\": \r\n");
 	}
 	
 	private void write(int i, int length) throws IOException{
 		Paragraph paragraph = today.getContent().get(i);
+		if(i==0)
+			bw.append((counter==0?"":",")+"[{\"datum\":\""+today.getDatum()+"\"\r\n");
+		
 		chooseText(paragraph);
 		if(i==length-1)
-			bw.append("ENDEDESKAPTELS\r\n\r\n");
+			bw.append(",\"version\":\"2017-12-26 23:17:17\"}\r\n\r\n");
 	
 	}
 	
@@ -78,18 +85,23 @@ public class TextFileController {
 	private void chooseText (Paragraph paragraph) throws IOException{
 		switch (paragraph.getOrdDetail()){
 		case 0:
-			bw.append("[{product_id:2,number:"+counter+","
-					+ "title:"+paragraph.getParagraph()+",text:\r\n");
+			bw.append(",\"vers\":\""+ paragraph.getParagraph()+"\"\r\n");
 			break;
 		case 1:
-			bw.append("<h1>"+paragraph.getParagraph()+"</h1>\r\n");
+			bw.append(",\"stelle\":\""+ paragraph.getParagraph()+"\"\r\n");
 			break;
 		case 2:
-			bw.append("<b>"+paragraph.getParagraph()+"</b>");
+			bw.append(",\"titel\":\""+ paragraph.getParagraph()+"\"\r\n");
 			break;
 		case 3:
-			bw.append("<p style=\"margin-left:0cm; margin-right:0cm\">"
-					+paragraph.getParagraph()+"</p>\r\n");
+			j++;
+			if(!text){
+				bw.append(",\"text\":\"\r\n");
+				text=true;
+			} 
+			bw.append("<p>"	+paragraph.getParagraph()+"</p>\r\n");
+			if (j==today.getAmountOfParagraphs())
+				bw.append("\",\"tagesvers\":\"\"");
 			break;			
 		}
 	}

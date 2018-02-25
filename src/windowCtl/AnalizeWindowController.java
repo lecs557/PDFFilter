@@ -16,10 +16,10 @@ public class AnalizeWindowController {
 	
 	public void initialize(){
 		for (String text:analize.getAnalizeText()){
-			analizeFont.setText(analizeFont.getText()+text);
+			analizeFont.setText(analizeFont.getText()+text+"\n");
 		}
 		for (String x:analize.getAnalizeX()){
-			analizeX.setText(analizeX.getText()+x);
+			analizeX.setText(analizeX.getText()+x+"\n");
 		}
 		analizeFont.setEditable(false);
 		analizeX.setEditable(false);

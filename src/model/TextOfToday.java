@@ -11,12 +11,23 @@ public class TextOfToday {
 	private int page;
 	private String datum = "";
 	private ArrayList<Paragraph> day;
+	private int AmountOfParagraphs = -1;
 	private boolean invalid;
 	
 	
 	public TextOfToday(int page) {
 		day = new ArrayList<Paragraph>();
 		this.page=page;
+	}
+	
+	// PRIVATE
+	private int countAmountOfParagraphs() {
+		int para=0;
+		for (Paragraph p: day){
+			if(p.getOrdDetail()==3)
+				para++;
+		}
+		return para;	
 	}
 	
 	// GETTERS & SETTERS
@@ -31,6 +42,11 @@ public class TextOfToday {
 	}
 	public ArrayList<Paragraph> getContent(){
 		return day;
+	}
+	public int getAmountOfParagraphs() {
+		if(AmountOfParagraphs==-1)
+			AmountOfParagraphs = countAmountOfParagraphs();
+		return AmountOfParagraphs;
 	}
 	public boolean isInvalid() {
 		return invalid;

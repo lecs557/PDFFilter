@@ -37,6 +37,7 @@ public class PDFController {
 	private int oldY = 500;
 	private int oldX = 0;
 	private boolean isDate;
+	private boolean heading;
 	
 	
 	//PUBLIC
@@ -46,6 +47,7 @@ public class PDFController {
 				new LocationTextExtractionStrategy(), info);
 		
 		isDate=false;
+		heading=false;
 		xVers=0;
 		oldY = 500;
 		textOfToday = new TextOfToday(page);
@@ -65,19 +67,20 @@ public class PDFController {
 		style style = createSryle(font);
 		
 		if ( !word.equals("") ) { 
-			if(session.isHasDate() && (isDate || isYBigger(y))){
+			if(session.isHasDate() && (isDate || isYBigger(y)) && dateCondition(y)){
 				if(newLine(y) && !textOfToday.getDatum().equals(""))
 					textOfToday.setDatum(" ");
 				textOfToday.setDatum(word);
-			} else if (changedStyleOrSize(style, size)){
+			} 
+			else if (changedStyleOrSize(style, size)){
 				if(xVers==0)
 					xVers=x;
-				startParagraph(word, style, startBase, size);
-				chooseDetail(style, x);
-			} else if(!belongsToCurrentParagraph(startBase, size)) {
-				startParagraph(word, style, startBase, size);
-				chooseDetail(style, x);
-			} else if (belongsToCurrentParagraph(startBase, size)){
+				chooseDetailAndStartParagraph(word, style, startBase, size);
+			} 
+			else if(!belongsToCurrentParagraph(startBase, size)) {
+				chooseDetailAndStartParagraph(word, style, startBase, size);
+			} 
+			else if (belongsToCurrentParagraph(startBase, size)){
 				currentParagraph.add(word);
 			}
 			if(newLine(y)) {		
@@ -107,36 +110,50 @@ public class PDFController {
 		return is;
 	}
 	
+	private Boolean dateCondition(int y){
+		for (Vector v:session.getPosDate()){
+			if (range(-7,y-(int)v.get(1),7))
+				return true;
+		}
+		return false;
+	}
+	
 	private boolean newLine(int y){
 		return y != oldY;
 	}
 	
 	private boolean changedStyleOrSize(style style, int size){
-		return style != oldStyle || size != oldSize;
+		return style != oldStyle || !range(-1,oldSize-size,1);
 	}
 	
-	private void startParagraph(String word, style style, Vector start, int size){
-		currentParagraph = new Paragraph(word, style, start, size);
-		textOfToday.getContent().add(currentParagraph);
-	}
-	
-	private void chooseDetail(style style, int x){
+	private void chooseDetailAndStartParagraph(String word, style style, Vector start, int size){
+		int x = (int) start.get(0);
 		switch(style.ordinal()){
 		case (0) :
 			if(x==xVers)
-				currentParagraph.setDetail(detail.Vers); 
-			else
-				currentParagraph.setDetail(detail.Heading);
+				startParagraph(word, style, start, size, detail.Vers); 
+			else if(!heading) {
+				startParagraph(word, style, start, size, detail.Heading); 
+				heading=true;
+			} else
+				currentParagraph.add(word);
 			break;
 		case(1):
-			currentParagraph.setDetail(detail.Passage); 		
+			startParagraph(word, style, start, size, detail.Paragraph); 
+			break;
 		case(2):
-			if(x>120)
-				currentParagraph.setDetail(detail.Passage); 
+			heading=false;
+			if(120<x)
+				startParagraph(word, style, start, size, detail.Passage); 
 			else
-				currentParagraph.setDetail(detail.Paragraph);
+				startParagraph(word, style, start, size, detail.Paragraph); 
 			break;
 		}	
+	}
+	
+	private void startParagraph(String word, style style, Vector start, int size, detail detail){
+		currentParagraph = new Paragraph(word, style, start, size, detail);
+		textOfToday.getContent().add(currentParagraph);
 	}
 	
 	private boolean belongsToCurrentParagraph(Vector start, int size) {
