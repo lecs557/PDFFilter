@@ -25,7 +25,7 @@ public class EvaluationWindowController {
 	
 	
 	public void initialize(){
-		sum.setText("Gesamt: "+ (sess.getPdfReader().getNumberOfPages()-sess.getInvalids().size()) );
+		sum.setText("Gesamt: "+ (sess.getEnd()-sess.getStart()-sess.getInvalids().size()) );
 		for(ArrayList<String> aos : analize.getAmountOfSegments()){
 			createTA();
 			for(String aoms: aos){

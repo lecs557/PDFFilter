@@ -66,22 +66,27 @@ public class PDFController {
 		int size = (int) (startAscent.get(1)-startBase.get(1));
 		style style = createSryle(font);
 		
-		if ( !word.equals("") ) { 
-			if(session.isHasDate() && (isDate || isYBigger(y)) && dateCondition(y)){
-				if(newLine(y) && !textOfToday.getDatum().equals(""))
-					textOfToday.setDatum(" ");
-				textOfToday.setDatum(word);
-			} 
-			else if (changedStyleOrSize(style, size)){
+		if ( !word.equals("") &&!isYBigger(y) && !isDate) { 
+//			if(session.isHasDate() && (isDate || isYBigger(y)) && dateCondition(y)){
+//				if(newLine(y) && !textOfToday.getDatum().equals(""))
+//					textOfToday.setDatum(" ");
+//				textOfToday.setDatum(word);
+//			} 
+//			else if (changedStyleOrSize(style, size)){
+//				if(xVers==0)
+//					xVers=x;
+//				chooseDetailAndStartParagraph(word, style, startBase, size);
+//			} 
+			if(!belongsToCurrentParagraph(startBase, size)) {
 				if(xVers==0)
 					xVers=x;
-				chooseDetailAndStartParagraph(word, style, startBase, size);
-			} 
-			else if(!belongsToCurrentParagraph(startBase, size)) {
-				chooseDetailAndStartParagraph(word, style, startBase, size);
+				chooseDetailAndStartParagraph(word, style, startBase, size, false);
 			} 
 			else if (belongsToCurrentParagraph(startBase, size)){
-				currentParagraph.add(word);
+				if (changedStyleOrSize(style, size))
+					chooseDetailAndStartParagraph(word, style, startBase, size, true);
+				else
+					currentParagraph.add(word);
 			}
 			if(newLine(y)) {		
 				oldX = x;
@@ -126,29 +131,30 @@ public class PDFController {
 		return style != oldStyle || !range(-1,oldSize-size,1);
 	}
 	
-	private void chooseDetailAndStartParagraph(String word, style style, Vector start, int size){
+	private void chooseDetailAndStartParagraph(String word, style style, Vector start, int size, boolean para){
 		int x = (int) start.get(0);
-		switch(style.ordinal()){
-		case (0) :
-			if(x==xVers)
-				startParagraph(word, style, start, size, detail.Vers); 
-			else if(!heading) {
-				startParagraph(word, style, start, size, detail.Heading); 
-				heading=true;
-			} else
-				currentParagraph.add(word);
-			break;
-		case(1):
+		if (para)
 			startParagraph(word, style, start, size, detail.Paragraph); 
-			break;
-		case(2):
-			heading=false;
-			if(120<x)
-				startParagraph(word, style, start, size, detail.Passage); 
-			else
-				startParagraph(word, style, start, size, detail.Paragraph); 
-			break;
-		}	
+		else {
+			switch(style.ordinal()){
+			case 2 :
+				if(x==xVers)
+					startParagraph(word, style, start, size, detail.Vers); 
+				else if(!heading) {
+					startParagraph(word, style, start, size, detail.Heading); 
+					heading=true;
+				} else
+					currentParagraph.add(word);
+				break;
+			case 0: case 1:
+				heading=false;
+				if(120<x)
+					startParagraph(word, style, start, size, detail.Passage); 
+				else
+					startParagraph(word, style, start, size, detail.Paragraph); 
+				break;
+			}
+		}
 	}
 	
 	private void startParagraph(String word, style style, Vector start, int size, detail detail){
@@ -159,7 +165,7 @@ public class PDFController {
 	private boolean belongsToCurrentParagraph(Vector start, int size) {
 		int x = (int) start.get(0);
 		int y = (int) start.get(1);
-		boolean btcp = y - oldY == 0 || range(-5,oldX -x,90) && oldX < 120 && oldY - y < size*2.2f;
+		boolean btcp = y - oldY == 0 || range(-5,oldX -x,90) && oldY - y < size*2;
 		return btcp;
 	}
 	

@@ -50,6 +50,8 @@ public class AnalizeController {
 			positionList.add("FEHLER");
 		} else {
 			for(Paragraph para:today.getContent()){
+				if(para.equals(" "))
+					System.out.println("NULL");
 				detailList.add(para.getOrdDetail());
 				textList.add(para.getParagraph());
 				fontList.add(para.getFont());

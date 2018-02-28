@@ -4,7 +4,7 @@ import com.itextpdf.text.pdf.parser.Vector;
 
 public class Paragraph {
 	public enum detail {Vers, Passage, Heading, Paragraph};
-	public enum style {Bold, Italic, Normal}
+	public enum style {Italic, Normal, Bold}
 	private String paragraph;
 	private String font;
 	private String position;
@@ -27,7 +27,6 @@ public class Paragraph {
 	public String getParagraph() {
 		while(paragraph.contains("  "))
 			paragraph = paragraph.replace("  ", " ");
-		
 		return paragraph;
 	}
 	public String getFont() {
