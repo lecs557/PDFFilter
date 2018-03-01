@@ -27,6 +27,7 @@ public class Paragraph {
 	public String getParagraph() {
 		while(paragraph.contains("  "))
 			paragraph = paragraph.replace("  ", " ");
+		
 		return paragraph;
 	}
 	public String getFont() {

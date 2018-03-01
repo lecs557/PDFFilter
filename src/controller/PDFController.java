@@ -66,7 +66,7 @@ public class PDFController {
 		int size = (int) (startAscent.get(1)-startBase.get(1));
 		style style = createSryle(font);
 		
-		if ( !word.equals("") &&!isYBigger(y) && !isDate) { 
+		if ( !word.equals("") && range(10,x,289) && y!=471 &&y!=21) { 
 //			if(session.isHasDate() && (isDate || isYBigger(y)) && dateCondition(y)){
 //				if(newLine(y) && !textOfToday.getDatum().equals(""))
 //					textOfToday.setDatum(" ");
@@ -158,6 +158,9 @@ public class PDFController {
 	}
 	
 	private void startParagraph(String word, style style, Vector start, int size, detail detail){
+		if(currentParagraph!=null && currentParagraph.getParagraph().equals(" "))
+			textOfToday.getContent().remove(currentParagraph);
+		
 		currentParagraph = new Paragraph(word, style, start, size, detail);
 		textOfToday.getContent().add(currentParagraph);
 	}
