@@ -24,6 +24,7 @@ public class OptionsWindowController {
 	Session ses = Main.getSession();
 	AnalizeController analizeC = ses.getAnalizeController();
 	ArrayList<Vector> posDate = Main.getSession().getPosDate();
+	private TextField textField;
 	@FXML
 	private Label lb;
 	@FXML
@@ -34,12 +35,19 @@ public class OptionsWindowController {
 	
 	public void initialize(){
 		int i=0;
+		int a=9;
 		lb.setText("Seite:"+ses.getStart() + " Datum " + ses.getPdfController().getTextOfToday().getDatum());
 		for (String para:analizeC.getAnalizeText()){
-			detailVB.getChildren().add(setUpChoicebox(i));
-			textVB.getChildren().add(setUpTextField(para));
-			fontVB.getChildren().add(setUpTextField(analizeC.getAnalizeFont().get(i)));
-			xVB.getChildren().add(setUpTextField(analizeC.getAnalizeX().get(i)));
+			if(analizeC.getParaList().get(i) != a) {
+				detailVB.getChildren().add(setUpChoicebox(i));
+				textVB.getChildren().add(setUpTextField(para));
+				fontVB.getChildren().add(setUpTextField(analizeC.getAnalizeFont().get(i)));
+				xVB.getChildren().add(setUpTextField(analizeC.getAnalizeX().get(i)));
+				a = analizeC.getParaList().get(i);
+			}
+			else{
+				textField.setText(textField.getText()+" // "+para);
+			}
 			i++;
 		}
 		for(Vector y:ses.getPosDate()){
@@ -92,7 +100,7 @@ public class OptionsWindowController {
 	}
 	
 	private TextField setUpTextField(String content){
-		TextField textField = new TextField();
+		textField = new TextField();
 		textField.setText(content);
 		textField.setEditable(false);		
 		return textField;

@@ -9,14 +9,16 @@ public class Paragraph {
 	private String font;
 	private String position;
 	private int ordDetail;
+	private int paraNum;
 	
 
 	// PUBLIC
-	public Paragraph(String para, style style, Vector pos, int size, detail detail) {
+	public Paragraph(int num, String para, style style, Vector pos, int size, detail detail) {
 		this.paragraph = para;
 		this.font = style.name()+" Größe:"+size;
 		this.position = (int)pos.get(0)+" "+(int)pos.get(1);
 		this.ordDetail = detail.ordinal();
+		this.paraNum=num;
 	}
 	
 	public void add (String word){
@@ -38,5 +40,9 @@ public class Paragraph {
 	}
 	public int getOrdDetail() {
 		return ordDetail;
+	}
+
+	public int getParaNum() {
+		return paraNum;
 	}
 }

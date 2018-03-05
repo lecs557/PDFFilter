@@ -38,6 +38,8 @@ public class PDFController {
 	private int oldX = 0;
 	private boolean isDate;
 	private boolean heading;
+	private boolean first;
+	private int num;
 	
 	
 	//PUBLIC
@@ -46,8 +48,10 @@ public class PDFController {
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
 		
+		num=-1;
 		isDate=false;
 		heading=false;
+		first=true;
 		xVers=0;
 		oldY = 500;
 		textOfToday = new TextOfToday(page);
@@ -67,17 +71,12 @@ public class PDFController {
 		style style = createSryle(font);
 		
 		if ( !word.equals("") && range(10,x,289) && y!=471 &&y!=21) { 
-//			if(session.isHasDate() && (isDate || isYBigger(y)) && dateCondition(y)){
-//				if(newLine(y) && !textOfToday.getDatum().equals(""))
-//					textOfToday.setDatum(" ");
-//				textOfToday.setDatum(word);
-//			} 
-//			else if (changedStyleOrSize(style, size)){
-//				if(xVers==0)
-//					xVers=x;
-//				chooseDetailAndStartParagraph(word, style, startBase, size);
-//			} 
-			if(!belongsToCurrentParagraph(startBase, size)) {
+			if(session.isHasDate() && (isDate || isYBigger(y)) && dateCondition(y)){
+				if(newLine(y) && !textOfToday.getDatum().equals(""))
+					textOfToday.setDatum(" ");
+				textOfToday.setDatum(word);
+			} 
+		else if(!belongsToCurrentParagraph(startBase, size)) {
 				if(xVers==0)
 					xVers=x;
 				chooseDetailAndStartParagraph(word, style, startBase, size, false);
@@ -133,15 +132,18 @@ public class PDFController {
 	
 	private void chooseDetailAndStartParagraph(String word, style style, Vector start, int size, boolean para){
 		int x = (int) start.get(0);
-		if (para)
-			startParagraph(word, style, start, size, detail.Paragraph); 
+		int y = (int) start.get(1);
+		if (para && y<350){
+			startParagraph(first?num+1:num, word, style, start, size, detail.Paragraph);
+			first=false;
+		}
 		else {
 			switch(style.ordinal()){
 			case 2 :
 				if(x==xVers)
-					startParagraph(word, style, start, size, detail.Vers); 
+					startParagraph(num+1, word, style, start, size, detail.Vers); 
 				else if(!heading) {
-					startParagraph(word, style, start, size, detail.Heading); 
+					startParagraph(num+1, word, style, start, size, detail.Heading); 
 					heading=true;
 				} else
 					currentParagraph.add(word);
@@ -149,20 +151,22 @@ public class PDFController {
 			case 0: case 1:
 				heading=false;
 				if(120<x)
-					startParagraph(word, style, start, size, detail.Passage); 
+					startParagraph(num+1, word, style, start, size, detail.Passage); 
 				else
-					startParagraph(word, style, start, size, detail.Paragraph); 
+					startParagraph(num+1, word, style, start, size, detail.Paragraph); 
 				break;
 			}
 		}
 	}
 	
-	private void startParagraph(String word, style style, Vector start, int size, detail detail){
+	private void startParagraph(int paraNum, String word, style style, Vector start, int size, detail detail){
 		if(currentParagraph!=null && currentParagraph.getParagraph().equals(" "))
 			textOfToday.getContent().remove(currentParagraph);
 		
-		currentParagraph = new Paragraph(word, style, start, size, detail);
+		currentParagraph = new Paragraph(paraNum ,word, style, start, size, detail);
 		textOfToday.getContent().add(currentParagraph);
+		num=paraNum;
+		System.out.println(num);
 	}
 	
 	private boolean belongsToCurrentParagraph(Vector start, int size) {

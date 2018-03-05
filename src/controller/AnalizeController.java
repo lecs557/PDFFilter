@@ -17,6 +17,7 @@ public class AnalizeController {
 	private ArrayList<String> positionList = new ArrayList<String>();
 	private ArrayList<String> fontList = new ArrayList<String>();
 	private ArrayList<Integer> detailList = new ArrayList<Integer>();
+	private ArrayList<Integer> paraList = new ArrayList<Integer>();
 	private String month="";
 	
 	
@@ -45,6 +46,7 @@ public class AnalizeController {
 		if(today.isInvalid()){
 			today.setDatum("Invalid");
 			detailList.add(3);
+			paraList.add(55);
 			textList.add("FEHLER");
 			fontList.add("FEHLER");
 			positionList.add("FEHLER");
@@ -54,6 +56,7 @@ public class AnalizeController {
 				textList.add(para.getParagraph());
 				fontList.add(para.getFont());
 				positionList.add(para.getPosition());
+				paraList.add(para.getParaNum());
 			}
 		}
 	}
@@ -78,5 +81,9 @@ public class AnalizeController {
 	}
 	public ArrayList<Integer> getDetails() {
 		return detailList;
+	}
+
+	public ArrayList<Integer> getParaList() {
+		return paraList;
 	}
 }

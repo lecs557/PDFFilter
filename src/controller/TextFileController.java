@@ -99,7 +99,12 @@ public class TextFileController {
 				bw.append(",\"text\":\"\r\n");
 				text=true;
 			} 
-			bw.append("<p>"	+paragraph.getParagraph()+"</p>\r\n");
+			if (paragraph.getFont().contains("Bold"))
+				bw.append("<b>"	+paragraph.getParagraph()+"</b>\r\n");
+			else if (paragraph.getFont().contains("Itallic"))
+			 bw.append("<i>"	+paragraph.getParagraph()+"</i>\r\n");
+			else if (paragraph.getFont().contains("Normal"))
+				bw.append("<p>"	+paragraph.getParagraph()+"</p>\r\n");
 			if (j==today.getAmountOfParagraphs())
 				bw.append("\",\"tagesvers\":\"\"");
 			break;			
