@@ -149,7 +149,7 @@ public class PDFController {
 					currentParagraph.add(word);
 				break;
 			case 0: case 1:
-				if(120<x)
+				if(50<x)
 					startParagraph(num+1, word, style, start, size, detail.Passage); 
 				else {
 					startParagraph(num+1, word, style, start, size, detail.Paragraph);

@@ -37,7 +37,6 @@ public class FontFilter extends RenderFilter {
 		int size=text.split(" ").length;
 		for (int i=0;i<size-1;i++){
 			Main.getSession().getPdfController().createText(text.split(" ")[i], trinf);
-			System.out.print(i+"GES ");
 		}
 		word=text.split(" ")[size-1];
 	}
@@ -50,7 +49,6 @@ public class FontFilter extends RenderFilter {
 			}
 			word="";
 			newWord = true;
-			System.out.println("ALLES GESENDET\n");
 		}	
 	}
 	

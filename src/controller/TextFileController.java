@@ -72,12 +72,7 @@ public class TextFileController {
 		if (session.getPosDate().size()!=0){
 			session.setHasDate(true);
 			String[] split = date.split(" ");
-			try{
-				Integer.parseInt(split[1]);		
-			}catch (Exception e){
-				return false;
-			}
-			return split.length==3;
+			return split.length>0;
 		}
 		return true;
 	}
