@@ -15,7 +15,6 @@ public class FontFilter extends RenderFilter {
 	@Override
 	public boolean allowText(TextRenderInfo tri) {
 		String text = tri.getText();
-		System.out.print(text+"|");
 		int y = (int)tri.getBaseline().getStartPoint().get(1);
 		if(y!=oldY)
 			startNewLine(text);

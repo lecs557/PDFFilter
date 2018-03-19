@@ -1,5 +1,4 @@
 package controller;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -21,11 +20,7 @@ import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextRenderInfo;
 import com.itextpdf.text.pdf.parser.Vector;
 
-/**
- * A handler which undertakes tasks which have to do the
- * selected PDF-File
- * @author Marcel
- */
+
 public class PDFController {	
 	private Session session = Main.getSession();
 	private PdfReader reader = session.getPdfReader();	
@@ -47,14 +42,7 @@ public class PDFController {
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
-		
-		num=-1;
-		isDate=false;
-		heading=false;
-		first=true;
-		xVers=0;
-		oldY = 500;
-		textOfToday = new TextOfToday(page);
+		initializeForNewDay(page);
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
@@ -70,12 +58,13 @@ public class PDFController {
 		style style = createSryle(font);
 		
 		if ( !word.equals("") && range(10,x,289) && y!=471 &&y!=21) { 
+			
 			if(session.isHasDate() && (isDate || isYBigger(y)) && dateCondition(y)){
 				if(newLine(y) && !textOfToday.getDatum().equals("") && !word.startsWith(" "))
 					textOfToday.setDatum(" ");
 				textOfToday.setDatum(word);
 			} 
-		else if(!belongsToCurrentParagraph(startBase, size)) {
+			else if(!belongsToCurrentParagraph(startBase, size)) {
 				if(xVers==0)
 					xVers=x;
 				chooseDetailAndStartParagraph(word, style, startBase, size, false);
@@ -96,6 +85,16 @@ public class PDFController {
 	}
 	
 	//PRIVATE
+	private void initializeForNewDay(int page) {
+		num=-1;
+		isDate=false;
+		heading=false;
+		first=true;
+		xVers=0;
+		oldY = 500;
+		textOfToday = new TextOfToday(page);
+	}
+	
 	private style createSryle (String temp){
 		style style = model.Paragraph.style.Normal;
 		for(style f:style.values()){
@@ -105,7 +104,6 @@ public class PDFController {
 		return style;
 	}
 	
-	 
 	private boolean isYBigger(int y){
 		boolean is = oldY < y;
 		if(is)
@@ -126,7 +124,7 @@ public class PDFController {
 	}
 	
 	private boolean changedStyleOrSize(style style, int size){
-		return style != oldStyle || !range(-1,oldSize-size,1);
+		return style != oldStyle || !range(-2,oldSize-size,2);
 	}
 	
 	private void chooseDetailAndStartParagraph(String word, style style, Vector start, int size, boolean para){
@@ -149,7 +147,7 @@ public class PDFController {
 					currentParagraph.add(word);
 				break;
 			case 0: case 1:
-				if(50<x)
+				if(currentParagraph.getOrdDetail()==0)
 					startParagraph(num+1, word, style, start, size, detail.Passage); 
 				else {
 					startParagraph(num+1, word, style, start, size, detail.Paragraph);

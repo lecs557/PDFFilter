@@ -54,17 +54,17 @@ public class TextFileController {
 				+"\\productTitle.txt");
 		bw = new BufferedWriter(new OutputStreamWriter(fos,				
 				StandardCharsets.UTF_8));
-		bw.append("{\"sheets\": \r\n");
+		bw.append("{\"sheets\": ");
 	}
 	
 	private void write(int i, int length) throws IOException{
 		Paragraph paragraph = today.getContent().get(i);
 		if(i==0)
-			bw.append((counter==0?"":",")+"[{\"datum\":\""+today.getDatum()+"\"\r\n");
+			bw.append((counter==0?"[":",")+"{\"datum\":\""+today.getDatum()+"\"");
 		
 		chooseText(paragraph);
 		if(i==length-1)
-			bw.append(",\"version\":\"2017-12-26 23:17:17\"}\r\n\r\n");
+			bw.append(",\"version\":\"2017-12-26 23:17:17\"}");
 	
 	}
 	
@@ -80,26 +80,26 @@ public class TextFileController {
 	private void chooseText (Paragraph paragraph) throws IOException{
 		switch (paragraph.getOrdDetail()){
 		case 0:
-			bw.append(",\"vers\":\""+ paragraph.getParagraph()+"\"\r\n");
+			bw.append(",\"vers\":\""+ paragraph.getParagraph()+"\"");
 			break;
 		case 1:
-			bw.append(",\"stelle\":\""+ paragraph.getParagraph()+"\"\r\n");
+			bw.append(",\"stelle\":\""+ paragraph.getParagraph()+"\"");
 			break;
 		case 2:
-			bw.append(",\"titel\":\""+ paragraph.getParagraph()+"\"\r\n");
+			bw.append(",\"titel\":\""+ paragraph.getParagraph()+"\"");
 			break;
 		case 3:
 			j++;
 			if(!text){
-				bw.append(",\"text\":\"\r\n");
+				bw.append(",\"text\":\"");
 				text=true;
 			} 
 			if (paragraph.getFont().contains("Bold"))
-				bw.append("<b>"	+paragraph.getParagraph()+"</b>\r\n");
-			else if (paragraph.getFont().contains("Itallic"))
-			 bw.append("<i>"	+paragraph.getParagraph()+"</i>\r\n");
+				bw.append("<b>"	+paragraph.getParagraph()+"</b>");
+			else if (paragraph.getFont().contains("Italic"))
+			 bw.append("<i>"	+paragraph.getParagraph()+"</i>");
 			else if (paragraph.getFont().contains("Normal"))
-				bw.append("<p>"	+paragraph.getParagraph()+"</p>\r\n");
+				bw.append("<p>"	+paragraph.getParagraph()+"</p>");
 			if (j==today.getAmountOfParagraphs())
 				bw.append("\",\"tagesvers\":\"\"");
 			break;			
