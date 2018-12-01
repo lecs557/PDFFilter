@@ -7,10 +7,7 @@
 	 <children>
 		<HBox prefHeight="400.0">
 			<VBox >
-				<TextArea prefHeight="300.0" fx:id="analizeFont" minWidth="250.0"/>
-			</VBox>
-			<VBox  prefWidth="250.0">
-				<TextArea prefHeight="300.0" fx:id="analizeX"  minWidth="250.0"/>
+				<TextArea prefHeight="300.0" fx:id="analizeFont" minWidth="400"/>
 			</VBox>
 		</HBox>
 		<HBox alignment="BOTTOM_RIGHT">

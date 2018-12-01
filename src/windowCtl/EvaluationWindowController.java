@@ -9,13 +9,11 @@ import javafx.scene.layout.HBox;
 import model.Main;
 import model.Session;
 import model.Session.window;
-import controller.AnalizeController;
 import controller.TextFileController;
 	
 
 public class EvaluationWindowController {
 	private Session sess = Main.getSession();;
-	private AnalizeController analize = sess.getAnalizeController();
 	@FXML
 	private TextField sum;
 	@FXML 
@@ -25,16 +23,7 @@ public class EvaluationWindowController {
 	
 	
 	public void initialize(){
-		sum.setText("Gesamt: "+ (sess.getEnd()-sess.getStart()-sess.getInvalids().size()) );
-		for(ArrayList<String> aos : analize.getAmountOfSegments()){
-			createTA();
-			for(String aoms: aos){
-				editTA(aoms+"\n");			
-			}
-		}
-		for (String inv: sess.getInvalids()){
-			invalids.setText(invalids.getText()+inv+"\n");
-		}
+	
 	}
 	
 	// FXML

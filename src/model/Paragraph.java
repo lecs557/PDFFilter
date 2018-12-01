@@ -4,7 +4,7 @@ import com.itextpdf.text.pdf.parser.Vector;
 
 public class Paragraph {
 	public enum detail {Vers, Passage, Heading, Paragraph};
-	public enum style {Italic, Normal, Bold}
+	public enum style {Italic, Normal, Bold, BoldItalic, Hochgestzellt}
 	private String paragraph;
 	private String font;
 	private String position;
@@ -19,6 +19,10 @@ public class Paragraph {
 		this.position = (int)pos.get(0)+" "+(int)pos.get(1);
 		this.ordDetail = detail.ordinal();
 		this.paraNum=num;
+	}
+	
+	public Paragraph() {
+		// TODO Auto-generated constructor stub
 	}
 	
 	public void add (String word){

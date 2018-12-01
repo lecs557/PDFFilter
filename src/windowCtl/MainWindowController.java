@@ -17,7 +17,6 @@ import model.Session.window;
 
 import com.itextpdf.text.pdf.PdfReader;
 
-import controller.AnalizeController;
 import controller.PDFController;
 import controller.TextFileController;
 
@@ -29,7 +28,7 @@ public class MainWindowController {
 	private int i=start;
 	private int end;
 	@FXML
-	private TextField tf_absolutePath, tf_pathDes ;
+	private TextField tf_absolutePath, tf_pathDes, tf_start, tf_end ;
 	@FXML
 	private Button okBtn, analizeBtn, browseDesBtn, preBtn, evaluationBtn;
 	@FXML
@@ -44,49 +43,27 @@ public class MainWindowController {
 		if (file != null) {
 			reader = new PdfReader(file.getAbsolutePath());
 			tf_absolutePath.setText(file.getAbsolutePath());
-			setupForFile(true);
+			preBtn.setDisable(false);
+			bar.setProgress(0);
 		} else{
 			tf_absolutePath.setText("");
-			setupForFile(false);
+			preBtn.setDisable(true);
 		}
 	}
-	
-	@FXML
-	private void onPressBrowseDes() throws IOException {
-		DirectoryChooser directoryChooser = new DirectoryChooser();
-		directoryChooser.setTitle("Open Resource File");
-		File file = directoryChooser.showDialog(session
-				.getStage(window.MainWindow));
-		if (tf_pathDes != null) {
-			tf_pathDes.setText(file.getAbsolutePath());
-		}
-	}
-	
+		
 	@FXML
 	private void onPressPre(){
-		int rn = new Random().nextInt(reader.getNumberOfPages()-2) + 1;
-		filter(rn,rn+1);
+		start = Integer.parseInt(tf_start.getText());
+		end = Integer.parseInt(tf_end.getText());
+		filter();
 		analizeBtn.setDisable(false);
 	}
 	
 	@FXML
 	private void onPressAnalize() throws IOException{
-		session.openWindow(window.OptionsWindow);	
 		session.openWindow(window.AnalizeWindow);
-		session.openWindow(window.EvaluationWindow);
 	}
-	
-	@FXML
-	private void onPressOk(){
-		filter(1,reader.getNumberOfPages());
-		okBtn.setDisable(true);
-	}
-
-	@FXML
-	private void onPressEvaluate() throws IOException{
-		session.openWindow(window.EvaluationWindow);
-	}
-	
+		
 	@FXML
 	private void onPressClose(){
 		System.exit(0);
@@ -99,30 +76,18 @@ public class MainWindowController {
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("PDF-Files", "*.pdf"));
 		return fileChooser;
 	}
-	
-	private void setupForFile(boolean file){
-		preBtn.setDisable(!file);
-		okBtn.setDisable(!file);
-		browseDesBtn.setDisable(!file);
-		tf_pathDes.setText(!file ? "" : "C:\\");
-		bar.setProgress(0);
-	}
-	
-	 void filter(int s, int e){
-		start=s;
-		end=e;
+		
+	 void filter(){
 		session.setStart(start);
 		session.setEnd(end);
 		startFiltering();
 	}
 	
 	private void setVariables(){
-		session.setDestination(tf_pathDes.getText());
 		session.setPdfReader(reader);
 		session.refreshStages();
 		session.setPdfController(new PDFController());	
 		session.setTextFileController(new TextFileController());
-		session.setAnalizeController(new AnalizeController());
 	}
 	
 	private void startFiltering(){
@@ -134,11 +99,8 @@ public class MainWindowController {
 					for (i = start; i <= end; i++) {
 						int page = i;
 						session.getPdfController().readPDF(page);
-						session.getTextFileController().writeDailytxt();
-						session.getAnalizeController().analize();
 					}	
 					analizeBtn.setDisable(false);
-					evaluationBtn.setDisable(false);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -11,7 +11,6 @@ import javafx.stage.Stage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.Vector;
 
-import controller.AnalizeController;
 import controller.PDFController;
 import controller.TextFileController;
 
@@ -24,7 +23,6 @@ import controller.TextFileController;
 public class Session {
 	private Stage[] stages = new Stage[4];
 	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
-	private AnalizeController analizeController;
 	private PDFController pdfController;
 	private TextFileController textFileController;
 	private PdfReader pdfReader;
@@ -71,12 +69,6 @@ public class Session {
 	// GETTERS & SETTERS
 	public Stage getStage(window window){
 		return stages[window.ordinal()];
-	}
-	public AnalizeController getAnalizeController() {
-		return analizeController;
-	}
-	public void setAnalizeController(AnalizeController analizeController) {
-		this.analizeController = analizeController;
 	}
 	public PDFController getPdfController() {
 		return pdfController;

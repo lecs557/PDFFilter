@@ -8,16 +8,14 @@ import java.util.ArrayList;
  * @author Marcel
  */
 public class TextOfToday {
-	private int page;
-	private String datum = "";
 	private ArrayList<Paragraph> day;
 	private int AmountOfParagraphs = -1;
 	private boolean invalid;
 	
 	
-	public TextOfToday(int page) {
+	public TextOfToday() {
 		day = new ArrayList<Paragraph>();
-		this.page=page;
+
 	}
 	
 	// PRIVATE
@@ -31,15 +29,7 @@ public class TextOfToday {
 	}
 	
 	// GETTERS & SETTERS
-	public int getPage() {
-		return page;
-	}
-	public String getDatum(){
-		return datum;
-	}
-	public void setDatum(String datum) {
-		this.datum += datum;
-	}
+
 	public ArrayList<Paragraph> getContent(){
 		return day;
 	}
@@ -54,7 +44,5 @@ public class TextOfToday {
 	public void setInvalid(boolean invalid) {
 		this.invalid = invalid;
 	}
-	public String getMonth(){
-		return datum.split(" ")[0];
-	}
+	
 }
