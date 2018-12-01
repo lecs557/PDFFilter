@@ -12,7 +12,6 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.Vector;
 
 import controller.PDFController;
-import controller.TextFileController;
 
 /**
  * Class is created by 'Main', contains the 
@@ -24,7 +23,6 @@ public class Session {
 	private Stage[] stages = new Stage[4];
 	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
 	private PDFController pdfController;
-	private TextFileController textFileController;
 	private PdfReader pdfReader;
 	private ArrayList<Vector> posDate = new ArrayList<Vector>();	
 	private ArrayList<String> invalids = new ArrayList<String>();	
@@ -75,12 +73,6 @@ public class Session {
 	}
 	public void setPdfController(PDFController pdfController) {
 		this.pdfController = pdfController;
-	}
-	public TextFileController getTextFileController() {
-		return textFileController;
-	}
-	public void setTextFileController(TextFileController textFileController) {
-		this.textFileController = textFileController;
 	}
 	public PdfReader getPdfReader() {
 		return pdfReader;

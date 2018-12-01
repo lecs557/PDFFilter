@@ -1,6 +1,8 @@
 package model;
 
-import model.Paragraph.style;
+
+
+import model.Artikel.style;
 
 import com.itextpdf.text.pdf.parser.RenderFilter;
 import com.itextpdf.text.pdf.parser.TextRenderInfo;

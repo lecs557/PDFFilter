@@ -4,12 +4,10 @@ import java.util.ArrayList;
 
 import model.Abschnitt;
 import model.Artikel;
+import model.Artikel.style;
 import model.FontFilter;
 import model.Main;
-import model.Paragraph;
-import model.Paragraph.style;
 import model.Session;
-import model.TextOfToday;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;

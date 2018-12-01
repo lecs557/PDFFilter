@@ -2,13 +2,11 @@ package windowCtl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import model.Main;
@@ -18,7 +16,6 @@ import model.Session.window;
 import com.itextpdf.text.pdf.PdfReader;
 
 import controller.PDFController;
-import controller.TextFileController;
 
 public class MainWindowController {
 
@@ -87,7 +84,6 @@ public class MainWindowController {
 		session.setPdfReader(reader);
 		session.refreshStages();
 		session.setPdfController(new PDFController());	
-		session.setTextFileController(new TextFileController());
 	}
 	
 	private void startFiltering(){
