@@ -74,7 +74,7 @@ public class FontFilter extends RenderFilter {
 	
 	private style extractStyleFrotTri (TextRenderInfo tri){
 		if ((int)tri.getBaseline().getStartPoint().get(1) - oldY < 30 && (int)tri.getBaseline().getStartPoint().get(1) - oldY > 0 )
-			return style.Hochgestzellt;
+			return style.Hochgestellt;
 		else if (tri.getFont().getPostscriptFontName().contains("Regular")){
 			return style.Normal;
 		} else if(tri.getFont().getPostscriptFontName().contains("Bold") && tri.getFont().getPostscriptFontName().contains("It")){
@@ -84,6 +84,6 @@ public class FontFilter extends RenderFilter {
 		} else if (tri.getFont().getPostscriptFontName().contains("Bold")){
 			return style.Bold;
 		}
-		return style.Hochgestzellt;
+		return style.Hochgestellt;
 	}
 }

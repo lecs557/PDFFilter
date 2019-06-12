@@ -66,7 +66,7 @@ public class PDFController {
 		case BoldItalic: return "<em><strong>"+word+"</em></strong>";
 		case Bold: return "<strong>"+word+"</strong>";
 		case Italic: return "<em>"+word+"</em>";
-		case Hochgestzellt: return "<sup>"+word+"</sup>";
+		case Hochgestellt: return "<sup>"+word+"</sup>";
 		}
 		return word;
 	}
