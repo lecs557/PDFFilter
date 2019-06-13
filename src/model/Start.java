@@ -18,6 +18,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.itextpdf.text.pdf.PdfReader;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.JProgressBar;
+import javax.swing.UIManager;
 
 
 public class Start {
@@ -32,6 +34,11 @@ public class Start {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -57,7 +64,7 @@ public class Start {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 449, 256);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -73,35 +80,49 @@ public class Start {
 		
 		final JLabel lbl_path = new JLabel("PATH");
 		lbl_path.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_path.setBounds(70, 63, 238, 14);
+		lbl_path.setBounds(67, 63, 238, 14);
 		frame.getContentPane().add(lbl_path);
 		
 		JButton btnDurchsuchen = new JButton("Durchsuchen");
-		btnDurchsuchen.setBounds(329, 59, 95, 23);
+		btnDurchsuchen.setBounds(318, 59, 106, 23);
 		frame.getContentPane().add(btnDurchsuchen);
 		
 		JLabel lbl_start = new JLabel("Startseite");
-		lbl_start.setBounds(10, 116, 47, 14);
+		lbl_start.setBounds(10, 88, 77, 14);
 		frame.getContentPane().add(lbl_start);
 		
-		final JSpinner spn_start = new JSpinner();
-		spn_start.setBounds(63, 113, 47, 20);
+		final JSpinner spn_start =  new JSpinner();
+		spn_start.setEnabled(false);
+		spn_start.setBounds(102, 84, 47, 20);
 		frame.getContentPane().add(spn_start);
 	
 		JLabel lbl_end = new JLabel("Endseite");
-		lbl_end.setBounds(10, 142, 41, 14);
+		lbl_end.setBounds(10, 113, 77, 14);
 		frame.getContentPane().add(lbl_end);
 		
 		final JSpinner spn_end = new JSpinner();
-		spn_end.setBounds(63, 139, 47, 20);
+		spn_end.setEnabled(false);
+		spn_end.setBounds(102, 109, 47, 20);
 		frame.getContentPane().add(spn_end);
 		
-		JButton btnOk = new JButton("OK");
-		btnOk.setEnabled(false);
-		btnOk.setBounds(287, 215, 137, 23);
-		frame.getContentPane().add(btnOk);
+		JButton btn_ok = new JButton("OK");
+		btn_ok.setEnabled(false);
+		btn_ok.setBounds(10, 183, 77, 23);
+		frame.getContentPane().add(btn_ok);
+		
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setBounds(10, 154, 414, 14);
+		frame.getContentPane().add(progressBar);
+		
+		JButton btn_close = new JButton("Schlie\u00DFen");
+		btn_close.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		btn_close.setBounds(335, 183, 89, 23);
+		frame.getContentPane().add(btn_close);
 		btnDurchsuchen.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = setupFileChooser();
 				int returnVal = chooser.showOpenDialog(frame.getOwner());
@@ -115,9 +136,12 @@ public class Start {
 					lbl_path.setText(chooser.getSelectedFile().getAbsolutePath());
 					spn_start.setModel(new SpinnerNumberModel(1, 1, pages, 1));
 					spn_end.setModel(new SpinnerNumberModel(1, 1, pages, 1));
+					spn_start.setEnabled(true);
+					spn_end.setEnabled(true);
 				} else{
 					lbl_path.setText("");
-					
+					spn_start.setEnabled(false);
+					spn_end.setEnabled(false);					
 				};
 				
 			} });
@@ -140,6 +164,4 @@ public class Start {
 		fileChooser.setFileFilter(new FileNameExtensionFilter("PDF-Files", "pdf"));
 		return fileChooser;
 	}
-	
-
 }
