@@ -3,6 +3,8 @@ package model;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,6 +22,10 @@ import controller.PDFController;
  * @author Marcel
  */
 public class Session {
+	
+	private JFrame currentFrame; 
+	
+	
 	private Stage[] stages = new Stage[4];
 	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
 	private PDFController pdfController;
@@ -33,6 +39,12 @@ public class Session {
 	
 	
 	// PUBLIC
+	
+	public Session (JFrame frame) {
+		currentFrame = frame;
+	}
+	
+	
 	public void initialize(Stage stage){
 		this.stages[0] = stage;
 	}
