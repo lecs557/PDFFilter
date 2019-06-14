@@ -105,7 +105,8 @@ public class Start {
 		spn_end.setBounds(102, 109, 47, 20);
 		frame.getContentPane().add(spn_end);
 		
-		JButton btn_ok = new JButton("OK");
+		final JButton btn_ok = new JButton("OK");
+		
 		btn_ok.setEnabled(false);
 		btn_ok.setBounds(10, 183, 77, 23);
 		frame.getContentPane().add(btn_ok);
@@ -138,10 +139,12 @@ public class Start {
 					spn_end.setModel(new SpinnerNumberModel(1, 1, pages, 1));
 					spn_start.setEnabled(true);
 					spn_end.setEnabled(true);
+					btn_ok.setEnabled(true);
 				} else{
 					lbl_path.setText("");
 					spn_start.setEnabled(false);
-					spn_end.setEnabled(false);					
+					spn_end.setEnabled(false);
+					btn_ok.setEnabled(false);
 				};
 				
 			} });
@@ -154,6 +157,11 @@ public class Start {
 					((SpinnerNumberModel) spn_end.getModel()).setValue( (Integer) spn_start.getValue() );
 				}
 				
+			}
+		});
+		
+		btn_ok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 			}
 		});
 	}
