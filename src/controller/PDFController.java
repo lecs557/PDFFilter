@@ -9,6 +9,7 @@ import model.FontFilter;
 import model.Main;
 import model.Session;
 import model.Start;
+import model.Word;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;
@@ -21,18 +22,14 @@ import com.itextpdf.text.pdf.parser.Vector;
 
 
 public class PDFController {	
-	private Session session = Start.getSession();
 	private PdfReader reader;	
-	private Abschnitt abschnitt;
-	private Artikel artikel;
-	private int oldY = 800;
+	private Word curWord = new Word("");
 	
 	
 	
 	//PUBLIC
 	public void readPDF(int page) throws IOException {
-		reader = session.getPdfReader();	
-		artikel = new Artikel();
+		reader = Start.getSession().getPdfReader();	
 		RenderFilter info = new FontFilter();
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
@@ -42,38 +39,17 @@ public class PDFController {
 	
 	}
 
-	public void createText(String word, TextRenderInfo rinfo, style style) {
-		Vector startBase = rinfo.getBaseline().getStartPoint();
-		int y = (int) startBase.get(1);
-		int x = (int) startBase.get(0);
-		System.out.println(word+" "+x+" "+y+" "+style.name()+"-->") ;
-		
-		if(60<y && y<570){
-			
-			if (oldY - y < 14){
-				abschnitt.addWord(format(word+" ", style));		
-			} else {
-				abschnitt = new Abschnitt();	
-				artikel.expand(abschnitt);
-				abschnitt.addWord(format(word+" ", style));
-			}
-			oldY = y;
-		}
-	}
-	
-	private String format(String word, style style){
-		switch (style){
-		case Normal: return word;
-		case BoldItalic: return "<em><strong>"+word+"</em></strong>";
-		case Bold: return "<strong>"+word+"</strong>";
-		case Italic: return "<em>"+word+"</em>";
-		case Hochgestellt: return "<sup>"+word+"</sup>";
-		}
-		return word;
+
+
+	public Word getCurWord() {
+		return curWord;
 	}
 
-	public Artikel getArtikel() {
-		return artikel;
+
+
+	public void setCurWord(Word curWord) {
+		this.curWord = curWord;
 	}
+
 }
 

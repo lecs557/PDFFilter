@@ -172,10 +172,10 @@ public class Start {
 							int start =(Integer) spn_start.getValue();
 							int end= (Integer) spn_end.getValue();
 							ses.setVariables(start,end);	
-							pgb_progess.setValue(0);
+							pgb_progess.setMaximum(end-start);
 							for (int i = start; i <= end; i++) {
 								int page = i;
-								pgb_progess.setValue(page);
+								pgb_progess.setValue(i-start);
 								ses.getPdfController().readPDF(page);
 							}	
 						} catch (IOException e) {
