@@ -1,7 +1,5 @@
 package model;
 
-
-
 import model.Artikel.style;
 
 import com.itextpdf.text.pdf.parser.RenderFilter;
@@ -9,32 +7,41 @@ import com.itextpdf.text.pdf.parser.TextRenderInfo;
 
 public class FontFilter extends RenderFilter {
 	
+	private Session ses = Start.getSession();
+	
 	private String word ="";
 	private TextRenderInfo trinf;
 	private style curStyle;
 	private boolean newWord = false;	
 	private int oldY=600;
+	private Word currentWord;
 	
 	public FontFilter(){ }
 	
 	@Override
 	public boolean allowText(TextRenderInfo tri) {
 		String text = tri.getText();
+		String font = tri.getFont().getPostscriptFontName();
+		int size = (int)tri.getRise();
 		int y = (int)tri.getBaseline().getStartPoint().get(1);
-	
 		if (newWord) {
-			trinf = tri;
-			curStyle = extractStyleFrotTri(trinf);
+			currentWord = new Word(text,font,size);
 		}
-		if (y != oldY)
-			startNewLine(text, tri);
-		else if (text.endsWith(" "))
-			sendAllWords(word + text);
-		else if (text.contains(" "))
-			sendWords(word + text);
+		else if (y != oldY) { // New Line
+			currentWord = new Word(text,font,size);
+		}
+		else if (text.endsWith(" ")) {
+			currentWord.addLetter(text);
+			newWord = true;
+		}
+		else if (text.contains(" ")) {
+			String old = text.split(" ")[0];
+			String nw = text.split(" ")[1];
+			currentWord.addLetter(old);
+			currentWord = new Word(text,font,size);
+		}
 		else {
-			word += text;
-			newWord = false;
+			currentWord.addLetter(text);
 		}
 		oldY = y;
 		return true;
@@ -43,7 +50,7 @@ public class FontFilter extends RenderFilter {
 	private void sendWords(String text){
 		int size=text.split(" ").length;
 		for (int i=0;i<size-1;i++){
-			Main.getSession().getPdfController().createText(text.split(" ")[i], trinf, curStyle);
+			ses.getPdfController().createText(text.split(" ")[i], trinf, curStyle);
 		}
 		word=text.split(" ")[size-1];
 		newWord = false;
@@ -53,7 +60,7 @@ public class FontFilter extends RenderFilter {
 		int size=text.split(" ").length;
 		if(trinf!=null){
 			for (int i=0;i<size;i++){
-				Main.getSession().getPdfController().createText(text.split(" ")[i], trinf, curStyle);
+				ses.getPdfController().createText(text.split(" ")[i], trinf, curStyle);
 			}
 			word="";
 			newWord = true;

@@ -8,6 +8,7 @@ import model.Artikel.style;
 import model.FontFilter;
 import model.Main;
 import model.Session;
+import model.Start;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;
@@ -20,19 +21,19 @@ import com.itextpdf.text.pdf.parser.Vector;
 
 
 public class PDFController {	
-	private Session session = Main.getSession();
-	private PdfReader reader = session.getPdfReader();	
+	private Session session = Start.getSession();
+	private PdfReader reader;	
 	private Abschnitt abschnitt;
-	private Artikel artikel = new Artikel();
+	private Artikel artikel;
 	private int oldY = 800;
 	
 	
 	
 	//PUBLIC
 	public void readPDF(int page) throws IOException {
+		reader = session.getPdfReader();	
+		artikel = new Artikel();
 		RenderFilter info = new FontFilter();
-		oldY=800;
-		
 		TextExtractionStrategy strategy = new FilteredTextRenderListener(
 				new LocationTextExtractionStrategy(), info);
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here,

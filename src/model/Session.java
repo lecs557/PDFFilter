@@ -42,7 +42,24 @@ public class Session {
 	
 	public Session (JFrame frame) {
 		currentFrame = frame;
+		pdfController= new PDFController();
 	}
+	
+	public void setVariables(int s, int e) {
+		start = s;
+		end = e;
+	}
+	
+	
+	//  
+	
+	public PdfReader getPdfReader() {
+		return pdfReader;
+	}
+	public void setPdfReader(PdfReader pdfReader) {
+		this.pdfReader = pdfReader;
+	}
+	
 	
 	
 	public void initialize(Stage stage){
@@ -86,12 +103,7 @@ public class Session {
 	public void setPdfController(PDFController pdfController) {
 		this.pdfController = pdfController;
 	}
-	public PdfReader getPdfReader() {
-		return pdfReader;
-	}
-	public void setPdfReader(PdfReader pdfReader) {
-		this.pdfReader = pdfReader;
-	}
+
 	public ArrayList<Vector> getPosDate() {
 		return posDate;
 	}

@@ -17,6 +17,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.itextpdf.text.pdf.PdfReader;
+
+import controller.PDFController;
+
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JProgressBar;
 import javax.swing.UIManager;
@@ -26,13 +29,15 @@ public class Start {
 	
 	private static Session ses;
 	private PdfReader reader;
+	
+	public static Session getSession() {
+		return ses;
+	}
+
 	int pages;
 
 	private static JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -52,16 +57,10 @@ public class Start {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public Start() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 449, 256);
@@ -83,9 +82,9 @@ public class Start {
 		lbl_path.setBounds(67, 63, 238, 14);
 		frame.getContentPane().add(lbl_path);
 		
-		JButton btnDurchsuchen = new JButton("Durchsuchen");
-		btnDurchsuchen.setBounds(318, 59, 106, 23);
-		frame.getContentPane().add(btnDurchsuchen);
+		JButton btn_browse = new JButton("Durchsuchen");
+		btn_browse.setBounds(318, 59, 106, 23);
+		frame.getContentPane().add(btn_browse);
 		
 		JLabel lbl_start = new JLabel("Startseite");
 		lbl_start.setBounds(10, 88, 77, 14);
@@ -111,9 +110,9 @@ public class Start {
 		btn_ok.setBounds(10, 183, 77, 23);
 		frame.getContentPane().add(btn_ok);
 		
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setBounds(10, 154, 414, 14);
-		frame.getContentPane().add(progressBar);
+		final JProgressBar pgb_progess = new JProgressBar();
+		pgb_progess.setBounds(10, 154, 414, 14);
+		frame.getContentPane().add(pgb_progess);
 		
 		JButton btn_close = new JButton("Schlie\u00DFen");
 		btn_close.addActionListener(new ActionListener() {
@@ -123,20 +122,23 @@ public class Start {
 		});
 		btn_close.setBounds(335, 183, 89, 23);
 		frame.getContentPane().add(btn_close);
-		btnDurchsuchen.addActionListener(new ActionListener() {
+		
+		
+		//  ----------- DURCHSUCHEN
+		btn_browse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser chooser = setupFileChooser();
 				int returnVal = chooser.showOpenDialog(frame.getOwner());
 				if(returnVal == JFileChooser.APPROVE_OPTION) {	
 					try {
 						reader = new PdfReader(chooser.getSelectedFile().getAbsolutePath());
+						ses.setPdfReader(reader);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					pages = reader.getNumberOfPages();
 					lbl_path.setText(chooser.getSelectedFile().getAbsolutePath());
-					spn_start.setModel(new SpinnerNumberModel(1, 1, pages, 1));
-					spn_end.setModel(new SpinnerNumberModel(1, 1, pages, 1));
+					spn_start.setModel(new SpinnerNumberModel(1, 1, reader.getNumberOfPages(), 1));
+					spn_end.setModel(new SpinnerNumberModel(1, 1, reader.getNumberOfPages(), 1));
 					spn_start.setEnabled(true);
 					spn_end.setEnabled(true);
 					btn_ok.setEnabled(true);
@@ -160,9 +162,29 @@ public class Start {
 			}
 		});
 		
+		
+		// ----------------OK
 		btn_ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				new Thread(){
+					public void run(){
+						try {
+							int start =(Integer) spn_start.getValue();
+							int end= (Integer) spn_end.getValue();
+							ses.setVariables(start,end);	
+							pgb_progess.setValue(0);
+							for (int i = start; i <= end; i++) {
+								int page = i;
+								pgb_progess.setValue(page);
+								ses.getPdfController().readPDF(page);
+							}	
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}.start();
 			}
+			
 		});
 	}
 	
