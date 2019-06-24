@@ -13,15 +13,17 @@ import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import model.Abschnitt;
 import model.Artikel;
 import model.FontFilter;
+import model.Session;
 import model.Start;
 import model.Word;
 
 
 public class PDFController {	
+	
+	private Session ses = Start.getSession();
 	private PdfReader reader;	
 	private Word curWord = new Word("STARTSTART");
-	private Abschnitt curAbschnitt;
-	
+
 	
 	//PUBLIC
 	public void readPDF(int page) throws IOException {
@@ -32,11 +34,10 @@ public class PDFController {
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here,
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
+		Start.getSession().getStructureController().getCurAbschnitt().say();
 	
 	}
 	
-
-
 
 
 	public Word getCurWord() {

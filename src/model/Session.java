@@ -14,6 +14,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.Vector;
 
 import controller.PDFController;
+import controller.StructureController;
 
 /**
  * Class is created by 'Main', contains the 
@@ -29,6 +30,10 @@ public class Session {
 	private Stage[] stages = new Stage[4];
 	public enum window {MainWindow,EvaluationWindow,AnalizeWindow,OptionsWindow};
 	private PDFController pdfController;
+	private StructureController structureController;
+	public StructureController getStructureController() {
+		return structureController;
+	}
 	private PdfReader pdfReader;
 	private ArrayList<Vector> posDate = new ArrayList<Vector>();	
 	private ArrayList<String> invalids = new ArrayList<String>();	
@@ -42,7 +47,8 @@ public class Session {
 	
 	public Session (JFrame frame) {
 		currentFrame = frame;
-		pdfController= new PDFController();
+		structureController = new StructureController();
+		pdfController = new PDFController();
 	}
 	
 	public void setVariables(int s, int e) {

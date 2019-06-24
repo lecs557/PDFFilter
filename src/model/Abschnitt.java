@@ -10,6 +10,7 @@ public class Abschnitt {
 	private int size;
 	private int lastX;
 	private int lastY;
+	private int color;
 	
 	
 	public Abschnitt(Word word) {
@@ -18,6 +19,7 @@ public class Abschnitt {
 		size = word.getSize();
 		lastX = word.getX();
 		lastY = word.getY();
+		color = word.getColor();
 		
 	}
 	
@@ -28,7 +30,7 @@ public class Abschnitt {
 	}
 	
 	public void say() {
-		System.out.println("Artikel "+ font + "  " + words.size() + "  " + words.get(0));
+		System.out.println("Artikel "+ font + "  " + words.size() + "  " + words.get(0)+" "+color);
 	}
 
 	public ArrayList<String> getWords() {

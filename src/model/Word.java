@@ -9,7 +9,12 @@ public class Word {
 	private int size;
 	private int x;
 	private int y;
+	private int color;
 	
+	public int getColor() {
+		return color;
+	}
+
 	public Word(TextRenderInfo tri) {
 		text = tri.getText();
 		font = tri.getFont().getPostscriptFontName();
@@ -17,15 +22,20 @@ public class Word {
 		x = (int) tri.getBaseline().getStartPoint().get(0);
 		y = (int)tri.getBaseline().getStartPoint().get(1);	
 		
+			if(tri.getFillColor() != null)
+		color = tri.getFillColor().getGreen();
+			else color=0;
 	}
 	
-	public Word(TextRenderInfo tri,String w) {
+	public Word(String w,TextRenderInfo tri) {
 		text = w;
 		font = tri.getFont().getPostscriptFontName();
 		size = (int)tri.getRise();
 		x = (int) tri.getBaseline().getStartPoint().get(0);
 		y = (int)tri.getBaseline().getStartPoint().get(1);	
-		
+		if(tri.getFillColor() != null)
+			color = tri.getFillColor().getGreen();
+		else color=0;
 	}
 	
 	public String getText() {
