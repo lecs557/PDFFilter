@@ -16,8 +16,38 @@ public class Word {
 		size = (int)tri.getRise();
 		x = (int) tri.getBaseline().getStartPoint().get(0);
 		y = (int)tri.getBaseline().getStartPoint().get(1);	
+		
 	}
 	
+	public Word(TextRenderInfo tri,String w) {
+		text = w;
+		font = tri.getFont().getPostscriptFontName();
+		size = (int)tri.getRise();
+		x = (int) tri.getBaseline().getStartPoint().get(0);
+		y = (int)tri.getBaseline().getStartPoint().get(1);	
+		
+	}
+	
+	public String getText() {
+		return text;
+	}
+
+	public String getFont() {
+		return font;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	public Word(String a) {
 		text=a;
 	}

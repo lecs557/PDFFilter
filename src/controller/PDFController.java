@@ -7,7 +7,11 @@ import com.itextpdf.text.pdf.parser.LocationTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.itextpdf.text.pdf.parser.RenderFilter;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.TextRenderInfo;
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 
+import model.Abschnitt;
+import model.Artikel;
 import model.FontFilter;
 import model.Start;
 import model.Word;
@@ -15,8 +19,8 @@ import model.Word;
 
 public class PDFController {	
 	private PdfReader reader;	
-	private Word curWord = new Word("");
-	
+	private Word curWord = new Word("STARTSTART");
+	private Abschnitt curAbschnitt;
 	
 	
 	//PUBLIC
@@ -30,6 +34,8 @@ public class PDFController {
 				strategy);
 	
 	}
+	
+
 
 
 

@@ -9,9 +9,6 @@ public class FontFilter extends RenderFilter {
 	
 	private Session ses = Start.getSession();
 	
-	private String word ="";
-	private TextRenderInfo trinf;
-	private style curStyle;
 	private boolean newWord = false;	
 	private int oldY=600;
 	private Word currentWord = ses.getPdfController().getCurWord();
@@ -22,9 +19,10 @@ public class FontFilter extends RenderFilter {
 	public boolean allowText(TextRenderInfo tri) {
 		String text = tri.getText();
 		int y = (int)tri.getBaseline().getStartPoint().get(1);
+		System.out.println(text);
 		
 		if (newWord) {
-			currentWord.sayIt();
+			ses.getPdfController().makeStructure(currentWord);
 			currentWord = new Word(tri);
 			newWord = false;
 		}
@@ -32,8 +30,8 @@ public class FontFilter extends RenderFilter {
 			if(currentWord.check()) {
 				currentWord.addLetter(text);		
 			} else {
-			currentWord.sayIt();
-			currentWord = new Word(tri);
+				ses.getPdfController().makeStructure(currentWord);
+				currentWord = new Word(tri);
 			}
 			newWord = false;
 		}
@@ -46,8 +44,8 @@ public class FontFilter extends RenderFilter {
 			String old = text.split(" ")[0];
 			String nw = text.split(" ")[1];
 			currentWord.addLetter(old);
-			currentWord.sayIt();
-			currentWord = new Word(nw);
+			ses.getPdfController().makeStructure(currentWord);
+			currentWord = new Word(tri,nw);
 			newWord = false;
 		}
 		else {
@@ -55,6 +53,7 @@ public class FontFilter extends RenderFilter {
 			newWord = false;
 		}
 		oldY = y;
+		ses.getPdfController().setCurWord(currentWord);
 		return true;
 	}
 }
