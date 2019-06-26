@@ -18,8 +18,7 @@ public class StructureController {
 		String text = letter;
 		int x = (int)tri.getBaseline().getStartPoint().get(0);
 		int y = (int)tri.getBaseline().getStartPoint().get(1);
-		
-		
+				
 		if (text.contains(" ") && !text.endsWith(" ")) {
 			String old = text.split(" ",2)[0];
 			String nw = text.split(" ",2)[1];
@@ -67,13 +66,15 @@ public class StructureController {
 		oldX = x;
 	}
 	
-	public Abschnitt getCurAbschnitt() {
-		return curAbschnitt;
-	}
-
 	public void makeWordsToAbschnitt() {
 		if (curAbschnitt == null) {
 			curAbschnitt = new Abschnitt(currentWord);
+		}else if(currentWord.isHeading()) {
+			if (curAbschnitt.isHeading()) {
+				curAbschnitt.addWord(currentWord);
+			} else {
+				curAbschnitt = new Abschnitt(currentWord);
+			}
 		} else if (curAbschnitt.getLastY() - currentWord.getY() < 15)
 			curAbschnitt.addWord(currentWord);
 		else if (curAbschnitt.getLastY() - currentWord.getY() > 15) {
@@ -81,5 +82,9 @@ public class StructureController {
 			curAbschnitt = new Abschnitt(currentWord);
 		}
 			
+	}
+	
+	public Abschnitt getCurAbschnitt() {
+		return curAbschnitt;
 	}
 }

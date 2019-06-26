@@ -10,10 +10,8 @@ public class Word {
 	private int x;
 	private int y;
 	private int color;
+	private boolean isHeading;
 	
-	public int getColor() {
-		return color;
-	}
 
 	public Word(TextRenderInfo tri) {
 		text = tri.getText();
@@ -25,6 +23,8 @@ public class Word {
 			if(tri.getFillColor() != null)
 		color = tri.getFillColor().getGreen();
 			else color=0;
+			
+		isHeading = color != 0 && font.contains("bold");
 	}
 	
 	public Word(String w,TextRenderInfo tri) {
@@ -36,6 +36,10 @@ public class Word {
 		if(tri.getFillColor() != null)
 			color = tri.getFillColor().getGreen();
 		else color=0;
+	}
+	
+	public int getColor() {
+		return color;
 	}
 	
 	public String getText() {
@@ -62,6 +66,10 @@ public class Word {
 		text=a;
 	}
 	
+	public boolean isHeading() {
+		return isHeading;
+	}
+
 	public void sayIt() {
 		System.out.println(text+" ");
 	}

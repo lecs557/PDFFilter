@@ -11,6 +11,7 @@ public class Abschnitt {
 	private int lastX;
 	private int lastY;
 	private int color;
+	private boolean isHeading;
 	
 	
 	public Abschnitt(Word word) {
@@ -20,6 +21,7 @@ public class Abschnitt {
 		lastX = word.getX();
 		lastY = word.getY();
 		color = word.getColor();
+		isHeading = word.isHeading();
 		
 	}
 	
@@ -51,6 +53,10 @@ public class Abschnitt {
 
 	public int getLastX() {
 		return lastX;
+	}
+
+	public boolean isHeading() {
+		return isHeading;
 	}
 
 	public int getLastY() {
