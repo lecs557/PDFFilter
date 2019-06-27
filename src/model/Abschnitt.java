@@ -4,38 +4,65 @@ import java.util.ArrayList;
 
 public class Abschnitt {
 	
-	private ArrayList<String> words = new ArrayList<String>();
+	private ArrayList<Word> words = new ArrayList<Word>();
 	private String text;
 	private String font;
 	private int size;
-	private int lastX;
-	private int lastY;
+	private int lastX, firstX;
+	private int lastY, firstY;
 	private int color;
 	private boolean isHeading;
 	
 	
 	public Abschnitt(Word word) {
-		words.add(word.getText());
+		word.setAbschnitt(this);
+		words.add(word);
+		color = word.getColor();
 		font = word.getFont();
 		size = word.getSize();
 		lastX = word.getX();
 		lastY = word.getY();
-		color = word.getColor();
 		isHeading = word.isHeading();
+		firstY = word.getY();
+		firstX = word.getX();
 		
 	}
 	
 	public void addWord(Word word) {
-		words.add(word.getText());
+		word.setAbschnitt(this);
+		words.add(word);
 		lastX = word.getX();
 		lastY = word.getY();
 	}
 	
-	public void say() {
-		System.out.println("Artikel "+ font + "  " + words.size() + "  " + words.get(0)+" "+color);
+	public String getResult() {
+		String result;
+		if (font.contains("It")) {
+			result="<it>";
+			for (Word w: words) {
+				result += w.getText();
+			}
+			result +="</it>";		
+		} else if(isHeading) {
+			result ="<h3>";
+			for (Word w: words) {
+				result +=w.getText();
+			}
+			result +="</h3>";
+		} else {
+			result ="<p>";
+			for (Word w: words) {
+				result +=w.getText();
+			}
+			result +="</p>";
+		}	
+		return result;
 	}
 
-	public ArrayList<String> getWords() {
+	public String getInfo() {
+		return font+" s "+size+" "+firstX+":"+firstY+" -  "+lastX+":"+lastY+" h "+isHeading+" x "+color;
+	}
+	public ArrayList<Word> getWords() {
 		return words;
 	}
 
@@ -62,9 +89,9 @@ public class Abschnitt {
 	public int getLastY() {
 		return lastY;
 	}
-	
 
+	public int getFirstY() {
+		return firstY;
+	}
 	
-	
-
 }

@@ -36,6 +36,7 @@ public class Session {
 	}
 	private PdfReader pdfReader;
 	private ArrayList<Vector> posDate = new ArrayList<Vector>();	
+	private ArrayList<Abschnitt> artikel = new ArrayList<Abschnitt>();	
 	private ArrayList<String> invalids = new ArrayList<String>();	
 	private String destination;
 	private int start;
@@ -137,7 +138,15 @@ public class Session {
 	public boolean isHasDate() {
 		return hasDate;
 	}
+	public void setArtikel(ArrayList<Abschnitt> artikel) {
+		this.artikel = artikel;
+	}
+
 	public void setHasDate(boolean hasDate) {
 		this.hasDate = hasDate;
+	}
+
+	public ArrayList<Abschnitt> getArtikel() {
+		return artikel;
 	}
 }

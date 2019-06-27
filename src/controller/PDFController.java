@@ -34,7 +34,6 @@ public class PDFController {
 		@SuppressWarnings("unused") // <<FobtFilter>> is invoked here,
 		String content = PdfTextExtractor.getTextFromPage(reader, page,
 				strategy);
-		Start.getSession().getStructureController().getCurAbschnitt().say();
 	
 	}
 	

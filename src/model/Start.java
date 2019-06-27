@@ -178,6 +178,10 @@ public class Start {
 								pgb_progess.setValue(i-start);
 								ses.getPdfController().readPDF(page);
 							}	
+							for (Abschnitt a:getSession().getStructureController().getArtikel()) {
+								System.out.println(a.getInfo());
+								System.out.println(a.getResult());
+							}
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
