@@ -30,7 +30,7 @@ public class Word {
 			color = tri.getFillColor().getGreen();
 		else color=0;
 			
-		isHeading = color != 0 && font.contains("bold");
+		isHeading = font.contains("bold");
 	}
 	
 	public Word(String w,TextRenderInfo tri) {

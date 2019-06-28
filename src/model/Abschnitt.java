@@ -33,6 +33,7 @@ public class Abschnitt {
 		words.add(word);
 		lastX = word.getX();
 		lastY = word.getY();
+		isHeading = isHeading && word.isHeading();
 	}
 	
 	public String getResult() {
