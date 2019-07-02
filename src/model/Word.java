@@ -17,6 +17,7 @@ public class Word {
 
 	public Word(String a) {
 		text=a;
+		font="START";
 	}
 	
 	public Word(TextRenderInfo tri) {

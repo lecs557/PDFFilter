@@ -24,10 +24,6 @@ public class StructureController {
 		int x = (int)tri.getBaseline().getStartPoint().get(0);
 		int y = (int)tri.getBaseline().getStartPoint().get(1);
 		int size = (int)tri.getAscentLine().getStartPoint().get(1)-y;
-		int color;
-		if(tri.getFillColor() != null)
-			color = tri.getFillColor().getGreen();
-		else color=0;
 		
 		if (y < 570 && y > 52) {
 			
@@ -39,7 +35,7 @@ public class StructureController {
 					currentWord = foot;
 					currentWord.addLetter(tri.getText());
 				}
-			} else if (size>=7 && y > oldY && x!=66 && x!= 243 ) {			
+			} else if (size>=7 && y > oldY && x!=66 && x!= 249 ) {			
 				if(other==null) {
 					other = new Word(tri);
 					currentWord = other;
@@ -143,6 +139,15 @@ public class StructureController {
 	}
 
 	public void pushAbschnitt(Abschnitt absch) {
+		boolean isfoot = false;
+		boolean isother = false;
+		
+		if(foot != null)
+			isfoot=new Abschnitt(foot).getInfo().equals(absch.getInfo());		
+		if(other != null)
+			isother=new Abschnitt(other).getInfo().equals(absch.getInfo());		
+		if(!isfoot &&!isother) {
 			artikel.add(absch);		
+		}
 	}
 }
